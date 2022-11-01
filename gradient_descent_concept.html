@@ -1,0 +1,923 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Gradient Descent Concept &#8212; Machine Learning Foundations</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/tabs.css" />
+    <link rel="stylesheet" type="text/css" href="_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="_static/tabs.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"tex": {"macros": {"st": "\\mid", "S": "\\Omega", "P": "\\mathbb{P}", "R": "\\mathbb{R}", "v": "\\mathbf{v}", "a": "\\mathbf{a}", "b": "\\mathbf{b}", "c": "\\mathbf{c}", "u": "\\mathbf{u}", "w": "\\mathbf{w}", "x": "\\mathbf{x}", "y": "\\mathbf{y}", "z": "\\mathbf{z}", "0": "\\mathbf{0}", "1": "\\mathbf{1}", "A": "\\mathbf{A}", "B": "\\mathbf{B}", "C": "\\mathbf{C}", "E": "\\mathcal{F}", "lset": "\\left\\{", "rset": "\\right\\}", "lsq": "\\left[", "rsq": "\\right]", "pmf": "p_X", "cdf": "F_X", "pspace": "(\\Omega, \\mathcal{F}, \\mathbb{P})"}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Gradient Descent Construction" href="gradient_descent_construction.html" />
+    <link rel="prev" title="Introduction" href="intro.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Machine Learning Foundations</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Optimization
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Gradient Descent Concept
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gradient_descent_construction.html">
+   Gradient Descent Construction
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/gao-hongnan/gaohn-machine-learning-foundations"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/gao-hongnan/gaohn-machine-learning-foundations/issues/new?title=Issue%20on%20page%20%2Fgradient_descent_concept.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/gradient_descent_concept.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-intuition">
+   The Intuition
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-idea-of-neighbourhood">
+   The idea of neighbourhood
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#gradient-vector">
+   Gradient Vector
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#directional-derivatives">
+   Directional Derivatives
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#intuition-of-directional-derivative">
+     Intuition of Directional Derivative
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#theorem-the-direction-derivative">
+     Theorem (The Direction Derivative)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#difference-between-gradient-and-directional-derivative">
+     Difference between Gradient and Directional Derivative
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#gradient-points-to-the-direction-of-steepest-ascent">
+   Gradient Points to the Direction of Steepest Ascent
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references">
+   References
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#further-readings">
+     Further Readings
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#bibliography">
+     Bibliography.
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Gradient Descent Concept</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-intuition">
+   The Intuition
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-idea-of-neighbourhood">
+   The idea of neighbourhood
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#gradient-vector">
+   Gradient Vector
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#directional-derivatives">
+   Directional Derivatives
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#intuition-of-directional-derivative">
+     Intuition of Directional Derivative
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#theorem-the-direction-derivative">
+     Theorem (The Direction Derivative)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#difference-between-gradient-and-directional-derivative">
+     Difference between Gradient and Directional Derivative
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#gradient-points-to-the-direction-of-steepest-ascent">
+   Gradient Points to the Direction of Steepest Ascent
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references">
+   References
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#further-readings">
+     Further Readings
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#bibliography">
+     Bibliography.
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <div class="math notranslate nohighlight">
+\[
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\u}{\mathbf{u}}
+\newcommand{\v}{\mathbf{v}}
+\newcommand{\x}{\mathbf{x}}
+\]</div>
+<section class="tex2jax_ignore mathjax_ignore" id="gradient-descent-concept">
+<h1>Gradient Descent Concept<a class="headerlink" href="#gradient-descent-concept" title="Permalink to this headline">#</a></h1>
+<p>In mathematics, <strong>gradient descent</strong> (also often called steepest descent) is a <strong>first-order iterative optimization algorithm</strong> for finding a local minimum of a differentiable function. The idea is to take repeated steps in the opposite direction of the gradient (or approximate gradient) of the function at the current point, because this is the direction of steepest descent. Conversely, stepping in the direction of the gradient will lead to a local maximum of that function; the procedure is then known as gradient ascent.<a class="footnote-reference brackets" href="#gradient-descent-intro" id="id1">1</a></p>
+<p>This blog answers two questions:</p>
+<ol class="simple">
+<li><p>How does the gradient descent algorithm work?</p></li>
+<li><p>Why does the gradient points in the direction of the steepest ascent?</p></li>
+</ol>
+<p>In many articles and courses, gradient descent is often used to find the minimum of a function, by way of the following procedure:
+<span class="math notranslate nohighlight">\({\color{red} \textbf{To rewrite this pseudocode}}\)</span></p>
+<div class="proof algorithm admonition" id="gd-algo">
+<p class="admonition-title"><span class="caption-number">Algorithm 1 </span> (Gradient Descent)</p>
+<section class="algorithm-content" id="proof-content">
+<ol class="simple">
+<li><p>Start at the initial point.</p></li>
+<li><p>Take a step in the opposite direction of the gradient.</p></li>
+<li><p>Repeat steps 2 and 3 until the function is no longer decreasing.</p></li>
+<li><p>The point where the function is no longer decreasing is the minimum.</p></li>
+</ol>
+</section>
+</div><p>Our second question is equivalent to answering the point 2, on why do we take a step in the opposite direction of the gradient.</p>
+<section id="the-intuition">
+<h2>The Intuition<a class="headerlink" href="#the-intuition" title="Permalink to this headline">#</a></h2>
+<p>Quote wikipedia’s example.</p>
+</section>
+<section id="the-idea-of-neighbourhood">
+<span id="gradient-descent-concept-md-the-idea-of-neighbourhood"></span><h2>The idea of neighbourhood<a class="headerlink" href="#the-idea-of-neighbourhood" title="Permalink to this headline">#</a></h2>
+<p>Let us start with an one-dimensional example to illustrate the idea of neighbourhood.</p>
+<p>Define <span class="math notranslate nohighlight">\(f: \R \to \R\)</span> to be <span class="math notranslate nohighlight">\(f(x) = x^2\)</span>, then the gradient of <span class="math notranslate nohighlight">\(f\)</span> at a point <span class="math notranslate nohighlight">\(x = x_0\)</span> is <span class="math notranslate nohighlight">\(\frac {\partial f(x)} {\partial x} \vert x_0 = 2x_0\)</span>.</p>
+<p>A wrong interpretation is to treat the understanding of gradient as if it is a linear function.</p>
+<p>Let us fix a point <span class="math notranslate nohighlight">\(x = 2\)</span>, its output <span class="math notranslate nohighlight">\(f(x) = 4\)</span> and the gradient at that point is <span class="math notranslate nohighlight">\(\frac {\partial f(x)} {\partial x} \vert_{x=2} = 4\)</span>.
+It is wrong to say that for every <span class="math notranslate nohighlight">\(1\)</span> unit increase of <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(f(x)\)</span> will increase by <span class="math notranslate nohighlight">\(4\)</span>, where <span class="math notranslate nohighlight">\(4\)</span> is the gradient at that point.
+One can indeed verify that if <span class="math notranslate nohighlight">\(x\)</span> is increased by <span class="math notranslate nohighlight">\(1\)</span> unit from <span class="math notranslate nohighlight">\(x=2\)</span> to <span class="math notranslate nohighlight">\(x = 3\)</span>, then <span class="math notranslate nohighlight">\(f(x) = 3^2 = 9\)</span>, where <span class="math notranslate nohighlight">\(f(x)\)</span> is increased by <span class="math notranslate nohighlight">\(5\)</span> units, and not by <span class="math notranslate nohighlight">\(4\)</span>.</p>
+<p>Unlike the case of a linear function, the gradient of <span class="math notranslate nohighlight">\(f\)</span> at a point <span class="math notranslate nohighlight">\(x = x_0\)</span> is not fixed, but depends on the value of <span class="math notranslate nohighlight">\(x_0\)</span>.
+Consequently, the meaning of the gradient in such a function is only well defined in a small <span class="math notranslate nohighlight">\(\epsilon\)</span>-neighbourhood<a class="footnote-reference brackets" href="#epsilon" id="id2">2</a> around <span class="math notranslate nohighlight">\(x = 2\)</span>.
+Within this small neighbourhood, we can “loosely” visualize the portion of the function to be a “linear function” with a slope of <span class="math notranslate nohighlight">\(2\)</span>, as illustrated in the following figure.
+The enclosed green box is the neighborhood of <span class="math notranslate nohighlight">\(x = 2\)</span>, where if we zoom in, the portion of the function inside looks like a linear function with a slope of <span class="math notranslate nohighlight">\(2\)</span>.</p>
+<figure class="align-default" id="neighbourhood">
+<a class="reference internal image-reference" href="_images/neighbourhood.jpg"><img alt="_images/neighbourhood.jpg" src="_images/neighbourhood.jpg" style="width: 300px; height: 300px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Neighbourhood around x = 2.</span><a class="headerlink" href="#neighbourhood" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Indeed, if we set <span class="math notranslate nohighlight">\(\epsilon = 0.001\)</span>, then if <span class="math notranslate nohighlight">\(x = 2\)</span>, we have <span class="math notranslate nohighlight">\(f(x) = 4\)</span>; moving <span class="math notranslate nohighlight">\(x\)</span> by <span class="math notranslate nohighlight">\(\epsilon\)</span> from <span class="math notranslate nohighlight">\(x = 2\)</span> to <span class="math notranslate nohighlight">\(x = 2.001\)</span>
+yields us <span class="math notranslate nohighlight">\(f(x) \approxeq 4.004\)</span>. We now see that <span class="math notranslate nohighlight">\(x\)</span> increasing by <span class="math notranslate nohighlight">\(0.001\)</span> unit indeed yields us an increase of <span class="math notranslate nohighlight">\(4.004 - 4 = 0.004\)</span>,
+a factor of <span class="math notranslate nohighlight">\(4\)</span> increase to the output <span class="math notranslate nohighlight">\(f(x)\)</span>.</p>
+</section>
+<hr class="docutils" />
+<section id="gradient-vector">
+<h2>Gradient Vector<a class="headerlink" href="#gradient-vector" title="Permalink to this headline">#</a></h2>
+<div class="proof definition admonition" id="grad_vec">
+<p class="admonition-title"><span class="caption-number">Definition 1 </span> (Gradient Vector)</p>
+<section class="definition-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(f: \R^n \to \R\)</span> be a function that maps <span class="math notranslate nohighlight">\(\x\)</span> to <span class="math notranslate nohighlight">\(f(\x)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+f \colon \R^n &amp;\longrightarrow \R \\
+\x &amp;\longmapsto f(\x) \\
+\end{align*}
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\x = [x_1, x_2, \ldots, x_n]^\top\)</span> is a vector of <span class="math notranslate nohighlight">\(n\)</span> variables.</p>
+<p>Then the <em><strong>gradient</strong></em> of <span class="math notranslate nohighlight">\(f\)</span> is the <strong>vector</strong> of first-order partial derivatives of <span class="math notranslate nohighlight">\(f\)</span> with respect to each of the <span class="math notranslate nohighlight">\(n\)</span> variables.</p>
+<div class="math notranslate nohighlight" id="equation-grad-vec">
+<span class="eqno">(1)<a class="headerlink" href="#equation-grad-vec" title="Permalink to this equation">#</a></span>\[
+\begin{equation}
+\nabla f(\x) = \bigg[\frac{\partial f(\x)}{\partial x_1}, \frac{\partial f(\x)}{\partial x_2}, \ldots, \frac{\partial f(\x)}{\partial x_n} \bigg]^{\top}
+\end{equation}
+\]</div>
+<p>We can also replace the notation <span class="math notranslate nohighlight">\(\frac{\partial f(\x)}{\partial x_i}\)</span> in equation <a class="reference internal" href="#equation-grad-vec">(1)</a> with <span class="math notranslate nohighlight">\(f_{x_i}\)</span>.</p>
+</section>
+</div></section>
+<hr class="docutils" />
+<section id="directional-derivatives">
+<h2>Directional Derivatives<a class="headerlink" href="#directional-derivatives" title="Permalink to this headline">#</a></h2>
+<div class="proof definition admonition" id="definition-2">
+<p class="admonition-title"><span class="caption-number">Definition 2 </span> (Directional Derivative)</p>
+<section class="definition-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(f: \R^n \to \R\)</span> be a function that maps <span class="math notranslate nohighlight">\(\x\)</span> to <span class="math notranslate nohighlight">\(f(\x)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+f \colon \R^n &amp;\longrightarrow \R \\
+\x &amp;\longmapsto f(\x) \\
+\end{align*}
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\x = [x_1, x_2, \ldots, x_n]^\top\)</span> is a vector of <span class="math notranslate nohighlight">\(n\)</span> variables.</p>
+<p>Then the <em><strong>directional derivative</strong></em> of <span class="math notranslate nohighlight">\(f\)</span> <strong>at a point</strong> <span class="math notranslate nohighlight">\(\x\)</span> along a <strong>direction vector</strong></p>
+<div class="math notranslate nohighlight">
+\[
+\v = [v_1, v_2, \ldots, v_n]^\top
+\]</div>
+<p>is the function <span class="math notranslate nohighlight">\(D_{\v}(f)\)</span> defined by the limit:</p>
+<div class="math notranslate nohighlight" id="equation-directional-derivative-def">
+<span class="eqno">(2)<a class="headerlink" href="#equation-directional-derivative-def" title="Permalink to this equation">#</a></span>\[
+\begin{equation}
+D_{\v}(f) = \lim_{h \to 0} \frac{f(\x + h\v) - f(\x)}{h}
+\end{equation}
+\]</div>
+</section>
+</div><p>To avoid notation confusion and also understand the definition better, we use a simple example in 2-dimensional to illustrate the definition of the directional derivative.</p>
+<div class="proof example admonition" id="directional_derivative_example">
+<p class="admonition-title"><span class="caption-number">Example 1 </span> (Directional Derivative)</p>
+<section class="example-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(f: \R^2 \to \R\)</span> be defined as</p>
+<div class="math notranslate nohighlight">
+\[
+f(\x) = f(x_1, x_2) = x_1^2 + x_2^2
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\x\)</span> is a vector of scalar values <span class="math notranslate nohighlight">\(x_1\)</span> and <span class="math notranslate nohighlight">\(x_2\)</span>, both corresponds to the x- and y-coordinates of a point in the plane respectively.</p>
+<p>Following closely the definition, we need to define a <strong>direction vector</strong> <span class="math notranslate nohighlight">\(\v\)</span>.
+Since the definition did not say what <span class="math notranslate nohighlight">\(\v\)</span> was, we can define <span class="math notranslate nohighlight">\(\v\)</span> to be the unit vector in the south-east direction.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\v = \begin{bmatrix} 1 \\ -1 \end{bmatrix}
+\end{split}\]</div>
+<p>We also note that we want to compute the <strong>directional derivative</strong> of <span class="math notranslate nohighlight">\(f\)</span> at a point <span class="math notranslate nohighlight">\((x_1, x_2)\)</span>, where we arbitrarily choose <span class="math notranslate nohighlight">\((x_1, x_2) = \begin{bmatrix} 1 \\ 1 \end{bmatrix}\)</span>.</p>
+<p>Then, we can define the directional derivative of <span class="math notranslate nohighlight">\(f\)</span> at the point <span class="math notranslate nohighlight">\(\x = \begin{bmatrix} 1 \\ 1 \end{bmatrix}\)</span> along <span class="math notranslate nohighlight">\(\v = \begin{bmatrix} 1 \\ -1 \end{bmatrix}\)</span> as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{equation*}
+\begin{split}
+D_{\v}(f(1, 1)) &amp;= \lim_{h \to 0} \frac{f(\x + h\v) - f(\x)}{h} \\
+          &amp;= \lim_{h \to 0} \frac{f(x_1 + hv_1, x_2 + hv_2) - f(x_1, x_2)}{h} \\
+          &amp;= \lim_{h \to 0} \frac{f(1 + h, 1 - h) - f(1, 1)}{h} 
+\end{split}
+\end{equation*}
+\end{split}\]</div>
+<p>which evaluates to how much <span class="math notranslate nohighlight">\(f\)</span> changes when it moves a small unit distance <span class="math notranslate nohighlight">\(h\)</span> from <span class="math notranslate nohighlight">\(\x\)</span> to <span class="math notranslate nohighlight">\(\x + h\)</span> along the direction <span class="math notranslate nohighlight">\(\v\)</span>.</p>
+</section>
+</div><hr class="docutils" />
+<section id="intuition-of-directional-derivative">
+<span id="gradient-descent-concept-md-intuition-of-directional-derivative"></span><h3>Intuition of Directional Derivative<a class="headerlink" href="#intuition-of-directional-derivative" title="Permalink to this headline">#</a></h3>
+<p>This section builds up to an important derivation of the idea of the directional derivative.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In this section, we should constantly recall the idea of a <a class="reference internal" href="#gradient-descent-concept-md-the-idea-of-neighbourhood"><span class="std std-ref">neighbourhood</span></a> whenever we talk about per unit change, we should visualize that this unit is very small.</p>
+</div>
+<p>Let us restrict our focus to 2-variable mutlivariate function <span class="math notranslate nohighlight">\(f(x, y)\)</span>, bearing in mind that it can be scaled up to <span class="math notranslate nohighlight">\(n\)</span> variables.
+The components of <span class="math notranslate nohighlight">\(\nabla f\)</span> are the partial derivatives of <span class="math notranslate nohighlight">\(f\)</span> with respect to <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>.</p>
+<p>More concretely, given the partial derivative</p>
+<div class="math notranslate nohighlight" id="equation-partial-x">
+<span class="eqno">(3)<a class="headerlink" href="#equation-partial-x" title="Permalink to this equation">#</a></span>\[
+\begin{equation}
+\frac{\partial f(x, y)}{\partial x} 
+\end{equation}
+\]</div>
+<p>equation <a class="reference internal" href="#equation-partial-x">(3)</a> answers the question:
+how much does the value of <span class="math notranslate nohighlight">\(f\)</span> change when we hold <span class="math notranslate nohighlight">\(y\)</span> constant and nudge <span class="math notranslate nohighlight">\(x\)</span> by a small amount in the <span class="math notranslate nohighlight">\(x\)</span> direction (i.e. in the direction pointed to by the vector <span class="math notranslate nohighlight">\(\begin{bmatrix} 1 &amp; 0 \end{bmatrix}^\top\)</span>)?<a class="footnote-reference brackets" href="#partial-x-intuition" id="id3">3</a></p>
+<p>In a similar vein, given the partial derivative</p>
+<div class="math notranslate nohighlight" id="equation-partial-y">
+<span class="eqno">(4)<a class="headerlink" href="#equation-partial-y" title="Permalink to this equation">#</a></span>\[
+\begin{equation}
+\frac{\partial f(x, y)}{\partial y}
+\end{equation}
+\]</div>
+<p>equation <a class="reference internal" href="#equation-partial-y">(4)</a> answers the question:
+how much does the value of <span class="math notranslate nohighlight">\(f\)</span> change when we hold <span class="math notranslate nohighlight">\(x\)</span> constant and nudge <span class="math notranslate nohighlight">\(y\)</span> by a small amount in the <span class="math notranslate nohighlight">\(y\)</span> direction (i.e. in the direction pointed to by the vector <span class="math notranslate nohighlight">\(\begin{bmatrix} 0 &amp; 1 \end{bmatrix}^\top\)</span>)?<a class="footnote-reference brackets" href="#partial-y-intuition" id="id4">4</a></p>
+<p>Finally, it is often useful to note that <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> can move in tandem (i.e. we do not hold any of them constant), how do we then calculate how much <span class="math notranslate nohighlight">\(f\)</span> changes when we nudge both <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> by a small amount.
+Note that moving <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> both by <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> respectively is synonymous with moving the point <span class="math notranslate nohighlight">\((x, y)\)</span> by the vector <span class="math notranslate nohighlight">\(\begin{bmatrix} a &amp; b \end{bmatrix}^\top\)</span>. With vector in the playing field, we now attach the notion of a “direction”.</p>
+<p>We can use equation <a class="reference internal" href="#equation-directional-derivative-def">(2)</a> to compute how much <span class="math notranslate nohighlight">\(f\)</span> changes when we nudge the points <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> by a small amount in the <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> directions respectively.
+However, the calculation is cumbersome if we use the definition of the directional derivative.
+We will now use an example to derive an <em>alternate</em> formula by relating directional derivative to their partial derivatives composition.</p>
+<div class="proof example admonition" id="example-4">
+<p class="admonition-title"><span class="caption-number">Example 2 </span> (Directional Derivative)</p>
+<section class="example-content" id="proof-content">
+<p>If we want to move <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> by <span class="math notranslate nohighlight">\(1\)</span> and <span class="math notranslate nohighlight">\(-1\)</span> respectively, then it simply means that <span class="math notranslate nohighlight">\(x\)</span> is moved 1 unit along the <span class="math notranslate nohighlight">\(x\)</span> axis
+and <span class="math notranslate nohighlight">\(y\)</span> is moved -1 unit along the <span class="math notranslate nohighlight">\(y\)</span> axis.</p>
+<p>In vector terms, this means we moved <span class="math notranslate nohighlight">\((x, y)\)</span> in the direction <span class="math notranslate nohighlight">\(\begin{bmatrix} 1 &amp; -1 \end{bmatrix}^\top\)</span>.</p>
+<p>More generically, let <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> move <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> units respectively, then we moved <span class="math notranslate nohighlight">\((x, y)\)</span> in the direction <span class="math notranslate nohighlight">\(\begin{bmatrix} a &amp; b \end{bmatrix}^\top\)</span>.
+It turns out that the amount that <span class="math notranslate nohighlight">\(f\)</span> changes when we move in the <span class="math notranslate nohighlight">\(\v = \begin{bmatrix} a &amp; b \end{bmatrix}^\top\)</span> direction is exactly how much
+<span class="math notranslate nohighlight">\(f\)</span> changes when we move <span class="math notranslate nohighlight">\(a\)</span> units along the <span class="math notranslate nohighlight">\(x\)</span> axis and <span class="math notranslate nohighlight">\(b\)</span> units along the <span class="math notranslate nohighlight">\(y\)</span> axis<a class="footnote-reference brackets" href="#partial-xy-intuition" id="id5">5</a>.</p>
+<p>Recall that we <strong>know</strong> how much <span class="math notranslate nohighlight">\(f\)</span> changes when we move <span class="math notranslate nohighlight">\(x\)</span> by 1 unit:</p>
+<ul class="simple">
+<li><p>The partial derivative of <span class="math notranslate nohighlight">\(f\)</span> with respect to <span class="math notranslate nohighlight">\(x\)</span>: <span class="math notranslate nohighlight">\(\frac{\partial f(x, y)}{\partial x}\)</span></p></li>
+</ul>
+<p>Recall that we <strong>know</strong> how much <span class="math notranslate nohighlight">\(f\)</span> changes when we move <span class="math notranslate nohighlight">\(y\)</span> by 1 unit:</p>
+<ul class="simple">
+<li><p>The partial derivative of <span class="math notranslate nohighlight">\(f\)</span> with respect to <span class="math notranslate nohighlight">\(y\)</span>: <span class="math notranslate nohighlight">\(\frac{\partial f(x, y)}{\partial y}\)</span></p></li>
+</ul>
+<p>It follows that if we move <span class="math notranslate nohighlight">\(x\)</span> by <span class="math notranslate nohighlight">\(a\)</span> units, then <span class="math notranslate nohighlight">\(f\)</span> changes by</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(a \cdot \frac{\partial f(x, y)}{\partial x}\)</span></p></li>
+</ul>
+<p>and if we move <span class="math notranslate nohighlight">\(y\)</span> by <span class="math notranslate nohighlight">\(b\)</span> units, then <span class="math notranslate nohighlight">\(f\)</span> changes by</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(b \cdot \frac{\partial f(x, y)}{\partial y}\)</span></p></li>
+</ul>
+<p>Therefore, the amount that <span class="math notranslate nohighlight">\(f\)</span> changes when we move <span class="math notranslate nohighlight">\(x\)</span> by <span class="math notranslate nohighlight">\(a\)</span> units and <span class="math notranslate nohighlight">\(y\)</span> by <span class="math notranslate nohighlight">\(b\)</span> units is</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(a \cdot \frac{\partial f(x, y)}{\partial x} + b \cdot \frac{\partial f(x, y)}{\partial y}\)</span></p></li>
+</ul>
+<p>One might notice that for multivariate <span class="math notranslate nohighlight">\(f:\R^n \to \R\)</span>, the derivative <span class="math notranslate nohighlight">\(D_{\v}(f)\)</span> at the point <span class="math notranslate nohighlight">\(x \in \R^n\)</span> is defined to be a linear map <span class="math notranslate nohighlight">\(T: \R^n \to \R\)</span>.
+Therefore, the linearity rule applies.</p>
+<p>If the above is still not obvious, then we can approach it geometrically.
+Recall that we are mapping from <span class="math notranslate nohighlight">\(\R^2\)</span> to <span class="math notranslate nohighlight">\(\R\)</span>, the below diagram illustrates the mapping.</p>
+<figure class="align-default" id="directive-fig">
+<a class="reference internal image-reference" href="_images/geometric_r2_r1.jpg"><img alt="_images/geometric_r2_r1.jpg" src="_images/geometric_r2_r1.jpg" style="width: 300px; height: 300px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Geometric Intuition</span><a class="headerlink" href="#directive-fig" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+</div><hr class="docutils" />
+</section>
+<section id="theorem-the-direction-derivative">
+<span id="gradient-descent-concept-md-theorem-the-direction-derivative"></span><h3>Theorem (The Direction Derivative)<a class="headerlink" href="#theorem-the-direction-derivative" title="Permalink to this headline">#</a></h3>
+<p>The intuition <a class="reference internal" href="#gradient-descent-concept-md-intuition-of-directional-derivative"><span class="std std-ref">developed in the previous section</span></a> allows us to
+derive a new formula to calculate the directional derivative of <span class="math notranslate nohighlight">\(f\)</span> at a point <span class="math notranslate nohighlight">\(\x\)</span> when moved in the direction of <span class="math notranslate nohighlight">\(\v\)</span>.</p>
+<p>Although the example used is in 2-dimensions, we can generalize to <span class="math notranslate nohighlight">\(n\)</span> variables and we state it formally.</p>
+<div class="proof theorem admonition" id="dir-deriv-theorem">
+<p class="admonition-title"><span class="caption-number">Theorem 1 </span> (Directional Derivative)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(f: \R^n \to \R\)</span> be a function <span class="math notranslate nohighlight">\(f(\x)\)</span> where <span class="math notranslate nohighlight">\(\x = [x_1, x_2, \ldots, x_n]^\top\)</span> is a vector of <span class="math notranslate nohighlight">\(n\)</span> variables.</p>
+<p>If <span class="math notranslate nohighlight">\(f\)</span> is <strong>differentiable</strong> at <span class="math notranslate nohighlight">\(\x\)</span>, then the directional derivative <span class="math notranslate nohighlight">\(D_{\v}(f)\)</span> at <span class="math notranslate nohighlight">\(\x\)</span> is defined as follows:</p>
+<div class="math notranslate nohighlight" id="equation-directional-derivative-theorem">
+<span class="eqno">(5)<a class="headerlink" href="#equation-directional-derivative-theorem" title="Permalink to this equation">#</a></span>\[
+\begin{equation}
+D_{\v}(f(\x)) = \nabla f(\x) \cdot \v
+\end{equation}
+\]</div>
+<p>In most textbooks, we will <strong>normalize</strong> the direction vector <span class="math notranslate nohighlight">\(\v\)</span> to the standard unit vector <span class="math notranslate nohighlight">\(\u\)</span>.
+However, the usage of unit vector simplifies the derivation and other applications<a class="footnote-reference brackets" href="#unit-vector-1" id="id6">6</a><a class="footnote-reference brackets" href="#unit-vector-2" id="id7">7</a> , it is not an universal rule.</p>
+</section>
+</div><div class="info admonition">
+<p class="admonition-title">Important Note.</p>
+<p>It is extremely important to remember that the <strong>gradient vector</strong> of <span class="math notranslate nohighlight">\(f\)</span> at <span class="math notranslate nohighlight">\(\x\)</span> is already defined as <span class="math notranslate nohighlight">\(\nabla f(\x)\)</span>, to be the vector of partial derivatives of <span class="math notranslate nohighlight">\(f\)</span> at <span class="math notranslate nohighlight">\(\x\)</span>.</p>
+<p>This has two consequences:</p>
+<ol class="simple">
+<li><p>Given the gradient vector of <span class="math notranslate nohighlight">\(f\)</span> at <span class="math notranslate nohighlight">\(\x\)</span> and any direction <span class="math notranslate nohighlight">\(\v\)</span>, we can recover the directional derivative <span class="math notranslate nohighlight">\(D_{\v}(f)\)</span> at <span class="math notranslate nohighlight">\(\x\)</span> by simply multiplying it by <span class="math notranslate nohighlight">\(\v\)</span>.</p></li>
+<li><p>Given the gradient vector of <span class="math notranslate nohighlight">\(f\)</span> at <span class="math notranslate nohighlight">\(\x\)</span> and a scalar value directional derivative <span class="math notranslate nohighlight">\(D_{\v}(f)\)</span>, we can recover the direction <span class="math notranslate nohighlight">\(\v\)</span> by division.</p></li>
+</ol>
+</div>
+</section>
+<hr class="docutils" />
+<section id="difference-between-gradient-and-directional-derivative">
+<h3>Difference between Gradient and Directional Derivative<a class="footnote-reference brackets" href="#gradient-directional-derivative-difference" id="id8">8</a><a class="headerlink" href="#difference-between-gradient-and-directional-derivative" title="Permalink to this headline">#</a></h3>
+<p>When I was learning multivariate calculus, I have had my fair share of trouble with the difference
+between the gradient and the directional derivative.
+It is easy to confuse the two terms.</p>
+<p>Let us go back to the definitions:</p>
+<ul class="simple">
+<li><p>The <strong>gradient</strong> of a mutlivariate function <span class="math notranslate nohighlight">\(f\)</span> at a point <span class="math notranslate nohighlight">\(\x\)</span> is the <em><strong>vector</strong></em> of partial derivatives of <span class="math notranslate nohighlight">\(f\)</span> at <span class="math notranslate nohighlight">\(\x\)</span>, as defined in equation <a class="reference internal" href="#equation-grad-vec">(1)</a>.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+\nabla f(\x) = \bigg[\frac{\partial f(\x)}{\partial x_1}, \frac{\partial f(\x)}{\partial x_2}, \ldots, \frac{\partial f(\x)}{\partial x_n} \bigg]^\top
+\]</div>
+<ul class="simple">
+<li><p>The <strong>directional derivative</strong> of a mutlivariate function <span class="math notranslate nohighlight">\(f\)</span> at a point <span class="math notranslate nohighlight">\(\x\)</span> is the <em><strong>scalar</strong></em> value of the partial derivative of <span class="math notranslate nohighlight">\(f\)</span> at <span class="math notranslate nohighlight">\(\x\)</span> in the direction of <span class="math notranslate nohighlight">\(\v\)</span>,
+as defined in equation <a class="reference internal" href="#equation-directional-derivative-def">(2)</a> and <a class="reference internal" href="#equation-directional-derivative-theorem">(5)</a>.</p></li>
+</ul>
+<p>There are infinite directional derivatives around a point <span class="math notranslate nohighlight">\(\x\)</span> since there are infinitely many directions <span class="math notranslate nohighlight">\(\v\)</span>.
+However, there is only one gradient vector around a point <span class="math notranslate nohighlight">\(\x\)</span> and this is defined to be the vector that is the steepest ascent, which we will prove in the next section.</p>
+<p>Consider the following example:</p>
+<ul class="simple">
+<li><p>We have a point <span class="math notranslate nohighlight">\((x, y)\)</span> in <span class="math notranslate nohighlight">\(f\)</span>, where <span class="math notranslate nohighlight">\(f\)</span> is a function of two variables.
+Since this function can be graphed in 3-dimensions, we can visualize that there are <em><strong>infinite</strong></em> number of directions around the point <span class="math notranslate nohighlight">\((x, y)\)</span>.</p></li>
+<li><p>We can categorize the directions around the point as vectors <span class="math notranslate nohighlight">\(\v\)</span>. For simplicity, we restrict <span class="math notranslate nohighlight">\(\v\)</span> to be unit vectors.</p></li>
+<li><p>Recall the definition of the directional derivative of <span class="math notranslate nohighlight">\(f\)</span> at a point <span class="math notranslate nohighlight">\(\x\)</span> to be a <strong>scalar-valued</strong> function <span class="math notranslate nohighlight">\(D_{\v}(f)\)</span> parametrized by the direction vector <span class="math notranslate nohighlight">\(\v\)</span>.</p>
+<ul>
+<li><p>We also note that <span class="math notranslate nohighlight">\(D_{\v}(f)\)</span> is the instantaneous rate of change of <span class="math notranslate nohighlight">\(f\)</span> when we move in the direction <span class="math notranslate nohighlight">\(\v\)</span>.</p></li>
+</ul>
+</li>
+<li><p>There exists <strong>infinite</strong> number of such directional derivatives of <span class="math notranslate nohighlight">\(f\)</span> at a point <span class="math notranslate nohighlight">\(\x\)</span> since there are infinite number of directions <span class="math notranslate nohighlight">\(\v\)</span>. This can be seen by the orange arrows.</p></li>
+<li><p>However, there exists an <strong>unique</strong> direction <span class="math notranslate nohighlight">\(\v\)</span> which gives rise to the fastest instantaneous rate of change of <span class="math notranslate nohighlight">\(f\)</span> when moved in that direction.</p></li>
+<li><p>This unique direction points in the same direction as the gradient vector <span class="math notranslate nohighlight">\(\v\)</span>.</p></li>
+</ul>
+<figure class="align-default" id="infinite-directions">
+<a class="reference internal image-reference" href="_images/infinite_directions.jpg"><img alt="_images/infinite_directions.jpg" src="_images/infinite_directions.jpg" style="width: 300px; height: 300px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 3 </span><span class="caption-text">Infinite directions around a point in cross-sectional plane of 3d-figure.</span><a class="headerlink" href="#infinite-directions" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<hr class="docutils" />
+<section id="gradient-points-to-the-direction-of-steepest-ascent">
+<h2>Gradient Points to the Direction of Steepest Ascent<a class="headerlink" href="#gradient-points-to-the-direction-of-steepest-ascent" title="Permalink to this headline">#</a></h2>
+<p>We finally have the necessary definitions and theorems to prove the following statement:</p>
+<blockquote>
+<div><p>The <strong>direction</strong> of steepest ascent of a function <span class="math notranslate nohighlight">\(f: \R^n \to \R\)</span> is given by the <strong>gradient vector</strong> of <span class="math notranslate nohighlight">\(f\)</span>
+at a point <span class="math notranslate nohighlight">\(\x = \begin{bmatrix} x_1 &amp; x_2 &amp; \ldots &amp; x_n \end{bmatrix}^\top\)</span>.
+In other words, <span class="math notranslate nohighlight">\(f\)</span> increases the fastest when we move in the direction of the <strong>gradient vector</strong>.</p>
+</div></blockquote>
+<p>Before we prove this, it is best for us to rephrase the question to:</p>
+<blockquote>
+<div><p>Given a function <span class="math notranslate nohighlight">\(f\)</span> and a point <span class="math notranslate nohighlight">\(\x\)</span>, which direction vector (unit vector) <span class="math notranslate nohighlight">\(\v\)</span> gives the fastest rate of change of <span class="math notranslate nohighlight">\(f\)</span> when moved in that direction?</p>
+</div></blockquote>
+<p>This can then be found easily by following the theorem/definition in the <a class="reference internal" href="#gradient-descent-concept-md-theorem-the-direction-derivative"><span class="std std-ref">section on the alternative definition of the directional derivative</span></a>.</p>
+<p>The logic is that the <strong>directional derivative</strong> of <span class="math notranslate nohighlight">\(f\)</span> at <span class="math notranslate nohighlight">\(\x\)</span> is the <strong>rate of change</strong>, then it suffices to find the <strong>direction vector</strong> <span class="math notranslate nohighlight">\(\v\)</span> that gives the <strong>fastest rate of change</strong>.</p>
+<p>The theorem <a class="reference internal" href="#equation-directional-derivative-theorem">(5)</a> states that <span class="math notranslate nohighlight">\(D_{\v}(f(\x)) = \nabla f(\x) \cdot \v\)</span>.
+We then seek to solve the optimization problem:</p>
+<div class="math notranslate nohighlight" id="equation-optimal-direction-1">
+<span class="eqno">(6)<a class="headerlink" href="#equation-optimal-direction-1" title="Permalink to this equation">#</a></span>\[\begin{split}
+\begin{align}
+\v_{\max} &amp;\overset{(a)}{=} \underset{\v, \lVert \v \rVert = 1}{\operatorname{argmax}}D_{\v}(f(\x)) \\ 
+          &amp;\overset{(b)}{=} \underset{\v, \lVert \v \rVert = 1}{\operatorname{argmax}}\nabla f(\x) \cdot \v \\
+          &amp;\overset{(c)}{=} \underset{\v, \lVert \v \rVert = 1}{\operatorname{argmax}} \lVert \nabla f(\x) \rVert \cdot \lVert \v \rVert \cos(\theta)\\
+\end{align}
+\end{split}\]</div>
+<p>where we want to find the <strong>unique</strong> <span class="math notranslate nohighlight">\(\v_{\max}\)</span> such that <span class="math notranslate nohighlight">\(D_{\v}(f(\x))\)</span> is the <strong>maximum</strong>.</p>
+<p>In <a class="reference internal" href="#equation-optimal-direction-1">(6)</a>, equation (c), we invoked the <a class="reference external" href="https://en.wikipedia.org/wiki/Dot_product#Geometric_definition">geometric definition of the dot product</a>
+to represent the dot product as the <strong>cosine of the angle between the two vectors</strong>.</p>
+<p>Since we are optimizing over <span class="math notranslate nohighlight">\(\v\)</span> and the length of <span class="math notranslate nohighlight">\(\v\)</span> is 1, we can simplify the expression to:</p>
+<div class="math notranslate nohighlight" id="equation-optimal-direction-2">
+<span class="eqno">(7)<a class="headerlink" href="#equation-optimal-direction-2" title="Permalink to this equation">#</a></span>\[\begin{split}
+\begin{align}
+\v_{\max} &amp;\overset{(d)}{=}  \underset{\v, \lVert \v \rVert = 1}{\operatorname{argmax}} \lVert \nabla f(\x) \rVert \cdot \lVert \v \rVert \cos(\theta) \\
+          &amp;\overset{(e)}{=}  \underset{\v}{\operatorname{argmax}} \lVert \nabla f(\x) \rVert \cos(\theta) \\
+          &amp;\overset{(f)}{=}  \underset{\v}{\operatorname{argmax}} \cos(\theta) \\
+\end{align}
+\end{split}\]</div>
+<p>where</p>
+<ul class="simple">
+<li><p>In <a class="reference internal" href="#equation-optimal-direction-2">(7)</a> equation (e), <span class="math notranslate nohighlight">\(\lVert \v \rVert\)</span> was dropped since it is 1;</p></li>
+<li><p>In <a class="reference internal" href="#equation-optimal-direction-2">(7)</a> equation (f), <span class="math notranslate nohighlight">\(\lVert \nabla f(\x) \rVert\)</span> was dropped since it is not a function of <span class="math notranslate nohighlight">\(\v\)</span> and hence it is irrelevant.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\theta\)</span>, however, being the angle between <span class="math notranslate nohighlight">\(\v\)</span> and <span class="math notranslate nohighlight">\(\nabla f(\x)\)</span>, is dependent on <span class="math notranslate nohighlight">\(\v\)</span>.</p></li>
+<li><p>Therefore, <span class="math notranslate nohighlight">\(\cos(\theta)\)</span> is maximal when <span class="math notranslate nohighlight">\(\cos(\theta) = 1 \implies \theta = 0\)</span>.</p></li>
+<li><p>Consequently, <span class="math notranslate nohighlight">\(\theta = 0\)</span> implies <span class="math notranslate nohighlight">\(\nabla f(\x)\)</span> and <span class="math notranslate nohighlight">\(\v\)</span> are parallel.</p></li>
+</ul>
+<div class="important admonition">
+<p class="admonition-title">Success</p>
+<p>At this point, we have answered the question posed:</p>
+<p>Given a function <span class="math notranslate nohighlight">\(f\)</span> and a point <span class="math notranslate nohighlight">\(\x\)</span>, which direction vector (unit vector) <span class="math notranslate nohighlight">\(\v\)</span> gives the fastest rate of change of <span class="math notranslate nohighlight">\(f\)</span> when moved in that direction?</p>
+<p>It turns out this direction/unit vector we are finding is the gradient vector <span class="math notranslate nohighlight">\(\nabla f(\x)\)</span> itself, but reduced to its unit vector since we proved that <span class="math notranslate nohighlight">\(\v \parallel \nabla f(\x)\)</span>.</p>
+<p>As a result, we can then say that <span class="math notranslate nohighlight">\(f\)</span> increases the fastest when we move in the direction of the gradient vector <span class="math notranslate nohighlight">\(\nabla f(\x)\)</span>.</p>
+<p>It is worth noting that the rate of change of <span class="math notranslate nohighlight">\(f\)</span> at a point <span class="math notranslate nohighlight">\(\x\)</span> in the direction of the gradient vector <span class="math notranslate nohighlight">\(\nabla f(\x)\)</span>
+is given by the magnitude of the gradient vector itself.<a class="footnote-reference brackets" href="#proof-rate-of-change-is-magnitude-of-grad-vec" id="id9">9</a></p>
+</div>
+<p>We finally convinced ourselves that subtracting the gradient vector indeed (local) minimizes the objective/loss function provided it’s differentiable.</p>
+</section>
+<hr class="docutils" />
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">#</a></h2>
+<section id="further-readings">
+<h3>Further Readings<a class="headerlink" href="#further-readings" title="Permalink to this headline">#</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Gradient Descent is a big topic as it is the heart of many machine learning algorithms.</p>
+<p>Being a subset of the broader topic of optimization, there are many resources that
+you can read to learn more about gradient descent.</p>
+</div>
+<ul class="simple">
+<li><p><a class="reference external" href="https://d2l.ai/chapter_optimization/gd.html">D2L Chapter 12.3 Gradient Descent</a></p></li>
+</ul>
+</section>
+<section id="bibliography">
+<h3>Bibliography.<a class="headerlink" href="#bibliography" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.khanacademy.org/math/multivariable-calculus/multivariable-derivatives/partial-derivative-and-gradient-articles/a/the-gradient">https://www.khanacademy.org/math/multivariable-calculus/multivariable-derivatives/partial-derivative-and-gradient-articles/a/the-gradient</a></p></li>
+<li><p><a class="reference external" href="https://sootlasten.github.io/2017/gradient-steepest-ascent/">https://sootlasten.github.io/2017/gradient-steepest-ascent/</a></p></li>
+</ul>
+<hr class="docutils" />
+<hr class="footnotes docutils" />
+<dl class="footnote brackets">
+<dt class="label" id="gradient-descent-intro"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p><strong>“Gradient Descent,” Wikipedia (Wikimedia Foundation, June 28, 2022), <a class="reference external" href="https://en.wikipedia.org/wiki/Gradient_descent">https://en.wikipedia.org/wiki/Gradient_descent</a>.</strong></p>
+</dd>
+<dt class="label" id="epsilon"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dd><p><span class="math notranslate nohighlight">\(\epsilon\)</span> is often denoted <span class="math notranslate nohighlight">\(h\)</span> in the limit definition of derivatives.</p>
+</dd>
+<dt class="label" id="partial-x-intuition"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
+<dd><p><a class="reference external" href="https://sootlasten.github.io/2017/gradient-steepest-ascent/">Proof That the Gradient Points in the Direction of Steepest Ascent</a>: Sten Sootla’s Blog, Sten Sootla, March 15, 2017.</p>
+</dd>
+<dt class="label" id="partial-y-intuition"><span class="brackets"><a class="fn-backref" href="#id4">4</a></span></dt>
+<dd><p><a class="reference external" href="https://sootlasten.github.io/2017/gradient-steepest-ascent/">Proof That the Gradient Points in the Direction of Steepest Ascent</a>: Sten Sootla’s Blog, Sten Sootla, March 15, 2017.</p>
+</dd>
+<dt class="label" id="partial-xy-intuition"><span class="brackets"><a class="fn-backref" href="#id5">5</a></span></dt>
+<dd><p><a class="reference external" href="https://sootlasten.github.io/2017/gradient-steepest-ascent/">Proof That the Gradient Points in the Direction of Steepest Ascent</a>: Sten Sootla’s Blog, Sten Sootla, March 15, 2017.</p>
+</dd>
+<dt class="label" id="unit-vector-1"><span class="brackets"><a class="fn-backref" href="#id6">6</a></span></dt>
+<dd><p><a class="reference external" href="https://math.stackexchange.com/questions/1486767/why-in-a-directional-derivative-it-has-to-be-a-unit-vector#:~:text=If%20you%20don%27t%20use,the%20magnitude%20of%20the%20vector.&amp;text=That%20is%20a%20way%20to,to%20use%20a%20unit%20vector">Why in a directional derivative it has to be a unit vector</a></p>
+</dd>
+<dt class="label" id="unit-vector-2"><span class="brackets"><a class="fn-backref" href="#id7">7</a></span></dt>
+<dd><p><a class="reference external" href="https://math.stackexchange.com/questions/809376/why-normalize-and-the-definition-of-directional-derivative">why normalize and the definition of directional derivative</a></p>
+</dd>
+<dt class="label" id="gradient-directional-derivative-difference"><span class="brackets"><a class="fn-backref" href="#id8">8</a></span></dt>
+<dd><p><a class="reference external" href="https://math.stackexchange.com/questions/661195/what-is-the-difference-between-the-gradient-and-the-directional-derivative">What is the difference between the gradient and the directional derivative?</a></p>
+</dd>
+<dt class="label" id="proof-rate-of-change-is-magnitude-of-grad-vec"><span class="brackets"><a class="fn-backref" href="#id9">9</a></span></dt>
+<dd><p><a class="reference external" href="https://sootlasten.github.io/2017/gradient-steepest-ascent/">Proof the magnitude of the gradient vector is exactly the rate of change in that direction</a>: Sten Sootla’s Blog, Sten Sootla, March 15, 2017.</p>
+</dd>
+</dl>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="intro.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Introduction</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="gradient_descent_construction.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Gradient Descent Construction</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Hongnan Gao<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
