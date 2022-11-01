@@ -1,0 +1,14 @@
+matplotlib==3.6.0
+numpy==1.23.3
+pandas==1.5.0
+seaborn==0.12.0
+scipy==1.9.1
+ghp-import==2.1.0
+black==21.9b0
+click==7.1.2
+pylint==2.7.4
+cookiecutter==2.1.1
+jupyter-book==0.13.1
+sphinx-inline-tabs==2021.3.28b7
+sphinx-proof==0.1.3
+# myst-nb==0.16.0 # incompatible for curr jupyter-book but overwrite for new features so install manually

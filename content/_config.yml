@@ -1,0 +1,92 @@
+#######################################################################################
+# A default configuration that will be loaded for all jupyter books
+# See the documentation for help and more options: 
+# https://jupyterbook.org/customize/config.html
+
+#######################################################################################
+# Book settings
+title                       : Machine Learning Foundations  # The title of the book. Will be placed in the left navbar.
+author                      : Hongnan Gao  # The author of the book
+copyright                   : "2022"  # Copyright year to be placed in the footer
+logo                        : logo.png  # A path to the book logo
+only_build_toc_files        : true  # Only build the table of contents files, and not the full book
+
+# Force re-execution of notebooks on each build.
+# See https://jupyterbook.org/content/execute.html
+execute:
+  execute_notebooks: 'cache' # force # 'off'
+
+
+# MyST Configuration
+# myst_heading_anchors: 2
+
+# Define the name of the latex output file for PDF builds
+latex:
+  latex_documents:
+    targetname: book.tex
+
+# Add a bibtex file so that we can create citations
+bibtex_bibfiles:
+  - references.bib
+
+# Information about where the book exists on the web
+repository:
+  url: https://github.com/gao-hongnan/gaohn-machine-learning-foundations # Online location of your book
+  path_to_book: content  # Optional path to your book, relative to the repository root
+  branch: main  # Which branch of the repository should be used when creating links (optional)
+
+# Add GitHub buttons to your book
+# See https://jupyterbook.org/customize/config.html#add-a-link-to-your-repository
+html:
+  use_issues_button: true
+  use_repository_button: true
+
+
+# Launch button settings
+launch_buttons:
+  notebook_interface        : classic  # The interface interactive links will activate ["classic", "jupyterlab"]
+  thebe                     : false  # Add a thebe button to pages (requires the repository to run on Binder)
+  colab_url                 : "https://colab.research.google.com" # The URL of Google Colab (https://colab.research.google.com) only work for ipynb files
+
+parse:
+  myst_url_schemes: [mailto, http, https]
+  myst_heading_anchors: 3
+
+sphinx:
+  extra_extensions:
+    - sphinx_inline_tabs # https://jupyterbook.org/en/stable/advanced/sphinx.html
+    - sphinx_proof # https://jupyterbook.org/en/stable/content/proof.html
+    
+  config:
+    mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+    bibtex_reference_style: author_year # https://jupyterbook.org/en/stable/tutorials/references.html#tutorials-references
+    mathjax3_config:
+      tex:
+        macros:
+          "st": "\\mid"
+          "S": "\\Omega"
+          "P": "\\mathbb{P}"
+          "R": "\\mathbb{R}"
+          "v": "\\mathbf{v}"
+          "a": "\\mathbf{a}"
+          "b": "\\mathbf{b}"
+          "c": "\\mathbf{c}"
+          "u": "\\mathbf{u}"
+          "w": "\\mathbf{w}"
+          "x": "\\mathbf{x}"
+          "y": "\\mathbf{y}"
+          "z": "\\mathbf{z}"
+          "0": "\\mathbf{0}"
+          "1": "\\mathbf{1}"
+          "A": "\\mathbf{A}"
+          "B": "\\mathbf{B}"
+          "C": "\\mathbf{C}"
+          "E": "\\mathcal{F}"
+          "lset": "\\left\\{"
+          "rset": "\\right\\}"
+          "lsq": "\\left["
+          "rsq": "\\right]"
+          "pmf": "p_X"
+          "cdf": "F_X"
+          "pspace": "(\\Omega, \\mathcal{F}, \\mathbb{P})"
+
