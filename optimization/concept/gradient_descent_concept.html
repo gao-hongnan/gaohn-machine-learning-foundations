@@ -53,7 +53,7 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../../_static/sphinx-thebe.js"></script>
-    <script>window.MathJax = {"tex": {"macros": {"X": "\\symbf{X}", "st": "\\mid", "S": "\\Omega", "P": "\\mathbb{P}", "R": "\\mathbb{R}", "v": "\\mathbf{v}", "a": "\\mathbf{a}", "b": "\\mathbf{b}", "c": "\\mathbf{c}", "u": "\\mathbf{u}", "w": "\\mathbf{w}", "x": "\\mathbf{x}", "y": "\\mathbf{y}", "z": "\\mathbf{z}", "0": "\\mathbf{0}", "1": "\\mathbf{1}", "A": "\\mathbf{A}", "B": "\\mathbf{B}", "C": "\\mathbf{C}", "E": "\\mathcal{F}", "lset": "\\left\\{", "rset": "\\right\\}", "lsq": "\\left[", "rsq": "\\right]", "pmf": "p_X", "cdf": "F_X", "pspace": "(\\Omega, \\mathcal{F}, \\mathbb{P})"}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script>window.MathJax = {"tex": {"macros": {"X": "\\symbf{X}", "st": "\\mid", "S": "\\Omega", "P": "\\mathbb{P}", "R": "\\mathbb{R}", "v": "\\mathbf{v}", "a": "\\mathbf{a}", "b": "\\mathbf{b}", "c": "\\mathbf{c}", "u": "\\mathbf{u}", "w": "\\mathbf{w}", "x": "\\mathbf{x}", "y": "\\mathbf{y}", "z": "\\mathbf{z}", "0": "\\mathbf{0}", "1": "\\mathbf{1}", "A": "\\mathbf{A}", "B": "\\mathbf{B}", "C": "\\mathbf{C}", "E": "\\mathcal{F}", "lset": "\\left\\{", "rset": "\\right\\}", "lsq": "\\left[", "rsq": "\\right]", "lpar": "\\left(", "rpar": "\\right)", "pmf": "p_X", "cdf": "F_X", "pspace": "(\\Omega, \\mathcal{F}, \\mathbb{P})"}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -382,11 +382,6 @@ title="Print to PDF"
    Further Readings
   </a>
  </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#bibliography">
-   Bibliography.
-  </a>
- </li>
 </ul>
 
     </nav>
@@ -451,11 +446,6 @@ title="Print to PDF"
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#further-readings">
    Further Readings
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#bibliography">
-   Bibliography.
   </a>
  </li>
 </ul>
@@ -526,7 +516,7 @@ a factor of <span class="math notranslate nohighlight">\(4\)</span> increase to 
 <section id="gradient-vector">
 <h2>Gradient Vector<a class="headerlink" href="#gradient-vector" title="Permalink to this headline">#</a></h2>
 <div class="proof definition admonition" id="grad_vec">
-<p class="admonition-title"><span class="caption-number">Definition 11 </span> (Gradient Vector)</p>
+<p class="admonition-title"><span class="caption-number">Definition 12 </span> (Gradient Vector)</p>
 <section class="definition-content" id="proof-content">
 <p>Let <span class="math notranslate nohighlight">\(f: \R^n \to \R\)</span> be a function that maps <span class="math notranslate nohighlight">\(\x\)</span> to <span class="math notranslate nohighlight">\(f(\x)\)</span>:</p>
 <div class="math notranslate nohighlight">
@@ -550,7 +540,7 @@ f \colon \R^n &amp;\longrightarrow \R \\
 <section id="directional-derivatives">
 <h2>Directional Derivatives<a class="headerlink" href="#directional-derivatives" title="Permalink to this headline">#</a></h2>
 <div class="proof definition admonition" id="definition-2">
-<p class="admonition-title"><span class="caption-number">Definition 12 </span> (Directional Derivative)</p>
+<p class="admonition-title"><span class="caption-number">Definition 13 </span> (Directional Derivative)</p>
 <section class="definition-content" id="proof-content">
 <p>Let <span class="math notranslate nohighlight">\(f: \R^n \to \R\)</span> be a function that maps <span class="math notranslate nohighlight">\(\x\)</span> to <span class="math notranslate nohighlight">\(f(\x)\)</span>:</p>
 <div class="math notranslate nohighlight">
@@ -621,7 +611,7 @@ The components of <span class="math notranslate nohighlight">\(\nabla f\)</span>
 \end{equation}
 \]</div>
 <p>equation <a class="reference internal" href="#equation-partial-x">(3)</a> answers the question:
-how much does the value of <span class="math notranslate nohighlight">\(f\)</span> change when we hold <span class="math notranslate nohighlight">\(y\)</span> constant and nudge <span class="math notranslate nohighlight">\(x\)</span> by a small amount in the <span class="math notranslate nohighlight">\(x\)</span> direction (i.e. in the direction pointed to by the vector <span class="math notranslate nohighlight">\(\begin{bmatrix} 1 &amp; 0 \end{bmatrix}^\top\)</span>)?<a class="footnote-reference brackets" href="#partial-x-intuition" id="id3">3</a></p>
+how much does the value of <span class="math notranslate nohighlight">\(f\)</span> change when we hold <span class="math notranslate nohighlight">\(y\)</span> constant and nudge <span class="math notranslate nohighlight">\(x\)</span> by a small amount in the <span class="math notranslate nohighlight">\(x\)</span> direction (i.e. in the direction pointed to by the vector <span class="math notranslate nohighlight">\(\begin{bmatrix} 1 &amp; 0 \end{bmatrix}^\top\)</span>) <span id="id3">[<a class="reference internal" href="../../bibliography/bibliography.html#id3" title="Sootla Sten. URL: https://sootlasten.github.io/2017/gradient-steepest-ascent/.">Sten, n.d.</a>]</span>.</p>
 <p>In a similar vein, given the partial derivative</p>
 <div class="math notranslate nohighlight" id="equation-partial-y">
 <span class="eqno">(4)<a class="headerlink" href="#equation-partial-y" title="Permalink to this equation">#</a></span>\[
@@ -630,7 +620,7 @@ how much does the value of <span class="math notranslate nohighlight">\(f\)</spa
 \end{equation}
 \]</div>
 <p>equation <a class="reference internal" href="#equation-partial-y">(4)</a> answers the question:
-how much does the value of <span class="math notranslate nohighlight">\(f\)</span> change when we hold <span class="math notranslate nohighlight">\(x\)</span> constant and nudge <span class="math notranslate nohighlight">\(y\)</span> by a small amount in the <span class="math notranslate nohighlight">\(y\)</span> direction (i.e. in the direction pointed to by the vector <span class="math notranslate nohighlight">\(\begin{bmatrix} 0 &amp; 1 \end{bmatrix}^\top\)</span>)?<a class="footnote-reference brackets" href="#partial-y-intuition" id="id4">4</a></p>
+how much does the value of <span class="math notranslate nohighlight">\(f\)</span> change when we hold <span class="math notranslate nohighlight">\(x\)</span> constant and nudge <span class="math notranslate nohighlight">\(y\)</span> by a small amount in the <span class="math notranslate nohighlight">\(y\)</span> direction (i.e. in the direction pointed to by the vector <span class="math notranslate nohighlight">\(\begin{bmatrix} 0 &amp; 1 \end{bmatrix}^\top\)</span>) <span id="id4">[<a class="reference internal" href="../../bibliography/bibliography.html#id3" title="Sootla Sten. URL: https://sootlasten.github.io/2017/gradient-steepest-ascent/.">Sten, n.d.</a>]</span>.</p>
 <p>Finally, it is often useful to note that <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> can move in tandem (i.e. we do not hold any of them constant), how do we then calculate how much <span class="math notranslate nohighlight">\(f\)</span> changes when we nudge both <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> by a small amount.
 Note that moving <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> both by <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> respectively is synonymous with moving the point <span class="math notranslate nohighlight">\((x, y)\)</span> by the vector <span class="math notranslate nohighlight">\(\begin{bmatrix} a &amp; b \end{bmatrix}^\top\)</span>. With vector in the playing field, we now attach the notion of a “direction”.</p>
 <p>We can use equation <a class="reference internal" href="#equation-directional-derivative-def">(2)</a> to compute how much <span class="math notranslate nohighlight">\(f\)</span> changes when we nudge the points <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> by a small amount in the <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> directions respectively.
@@ -644,7 +634,7 @@ and <span class="math notranslate nohighlight">\(y\)</span> is moved -1 unit alo
 <p>In vector terms, this means we moved <span class="math notranslate nohighlight">\((x, y)\)</span> in the direction <span class="math notranslate nohighlight">\(\begin{bmatrix} 1 &amp; -1 \end{bmatrix}^\top\)</span>.</p>
 <p>More generically, let <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> move <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> units respectively, then we moved <span class="math notranslate nohighlight">\((x, y)\)</span> in the direction <span class="math notranslate nohighlight">\(\begin{bmatrix} a &amp; b \end{bmatrix}^\top\)</span>.
 It turns out that the amount that <span class="math notranslate nohighlight">\(f\)</span> changes when we move in the <span class="math notranslate nohighlight">\(\v = \begin{bmatrix} a &amp; b \end{bmatrix}^\top\)</span> direction is exactly how much
-<span class="math notranslate nohighlight">\(f\)</span> changes when we move <span class="math notranslate nohighlight">\(a\)</span> units along the <span class="math notranslate nohighlight">\(x\)</span> axis and <span class="math notranslate nohighlight">\(b\)</span> units along the <span class="math notranslate nohighlight">\(y\)</span> axis<a class="footnote-reference brackets" href="#partial-xy-intuition" id="id5">5</a>.</p>
+<span class="math notranslate nohighlight">\(f\)</span> changes when we move <span class="math notranslate nohighlight">\(a\)</span> units along the <span class="math notranslate nohighlight">\(x\)</span> axis and <span class="math notranslate nohighlight">\(b\)</span> units along the <span class="math notranslate nohighlight">\(y\)</span> axis <span id="id5">[<a class="reference internal" href="../../bibliography/bibliography.html#id3" title="Sootla Sten. URL: https://sootlasten.github.io/2017/gradient-steepest-ascent/.">Sten, n.d.</a>]</span>.</p>
 <p>Recall that we <strong>know</strong> how much <span class="math notranslate nohighlight">\(f\)</span> changes when we move <span class="math notranslate nohighlight">\(x\)</span> by 1 unit:</p>
 <ul class="simple">
 <li><p>The partial derivative of <span class="math notranslate nohighlight">\(f\)</span> with respect to <span class="math notranslate nohighlight">\(x\)</span>: <span class="math notranslate nohighlight">\(\frac{\partial f(x, y)}{\partial x}\)</span></p></li>
@@ -694,7 +684,7 @@ D_{\v}(f(\x)) = \nabla f(\x) \cdot \v
 \end{equation}
 \]</div>
 <p>In most textbooks, we will <strong>normalize</strong> the direction vector <span class="math notranslate nohighlight">\(\v\)</span> to the standard unit vector <span class="math notranslate nohighlight">\(\u\)</span>.
-However, the usage of unit vector simplifies the derivation and other applications<a class="footnote-reference brackets" href="#unit-vector-1" id="id6">6</a><a class="footnote-reference brackets" href="#unit-vector-2" id="id7">7</a> , it is not an universal rule.</p>
+However, the usage of unit vector simplifies the derivation and other applications<a class="footnote-reference brackets" href="#unit-vector-1" id="id6">3</a><a class="footnote-reference brackets" href="#unit-vector-2" id="id7">4</a> , it is not an universal rule.</p>
 </section>
 </div><div class="info admonition">
 <p class="admonition-title">Important Note.</p>
@@ -707,7 +697,7 @@ However, the usage of unit vector simplifies the derivation and other applicatio
 </div>
 </section>
 <section id="difference-between-gradient-and-directional-derivative">
-<h3>Difference between Gradient and Directional Derivative<a class="footnote-reference brackets" href="#gradient-directional-derivative-difference" id="id8">8</a><a class="headerlink" href="#difference-between-gradient-and-directional-derivative" title="Permalink to this headline">#</a></h3>
+<h3>Difference between Gradient and Directional Derivative<a class="footnote-reference brackets" href="#gradient-directional-derivative-difference" id="id8">5</a><a class="headerlink" href="#difference-between-gradient-and-directional-derivative" title="Permalink to this headline">#</a></h3>
 <p>When I was learning multivariate calculus, I have had my fair share of trouble with the difference
 between the gradient and the directional derivative.
 It is easy to confuse the two terms.</p>
@@ -798,7 +788,7 @@ to represent the dot product as the <strong>cosine of the angle between the two 
 <p>It turns out this direction/unit vector we are finding is the gradient vector <span class="math notranslate nohighlight">\(\nabla f(\x)\)</span> itself, but reduced to its unit vector since we proved that <span class="math notranslate nohighlight">\(\v \parallel \nabla f(\x)\)</span>.</p>
 <p>As a result, we can then say that <span class="math notranslate nohighlight">\(f\)</span> increases the fastest when we move in the direction of the gradient vector <span class="math notranslate nohighlight">\(\nabla f(\x)\)</span>.</p>
 <p>It is worth noting that the rate of change of <span class="math notranslate nohighlight">\(f\)</span> at a point <span class="math notranslate nohighlight">\(\x\)</span> in the direction of the gradient vector <span class="math notranslate nohighlight">\(\nabla f(\x)\)</span>
-is given by the magnitude of the gradient vector itself.<a class="footnote-reference brackets" href="#proof-rate-of-change-is-magnitude-of-grad-vec" id="id9">9</a></p>
+is given by the magnitude of the gradient vector itself <span id="id9">[<a class="reference internal" href="../../bibliography/bibliography.html#id3" title="Sootla Sten. URL: https://sootlasten.github.io/2017/gradient-steepest-ascent/.">Sten, n.d.</a>]</span>.</p>
 </div>
 <p>We finally convinced ourselves that subtracting the gradient vector indeed (local) minimizes the objective/loss function provided it’s differentiable.</p>
 </section>
@@ -808,14 +798,8 @@ is given by the magnitude of the gradient vector itself.<a class="footnote-refer
 <p>Being a subset of the broader topic of optimization, there are many resources that
 you can read to learn more about gradient descent.</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://d2l.ai/chapter_optimization/gd.html">D2L Chapter 12.3 Gradient Descent</a></p></li>
-</ul>
-</section>
-<section id="bibliography">
-<h2>Bibliography.<a class="headerlink" href="#bibliography" title="Permalink to this headline">#</a></h2>
-<ul class="simple">
-<li><p><a class="reference external" href="https://www.khanacademy.org/math/multivariable-calculus/multivariable-derivatives/partial-derivative-and-gradient-articles/a/the-gradient">https://www.khanacademy.org/math/multivariable-calculus/multivariable-derivatives/partial-derivative-and-gradient-articles/a/the-gradient</a></p></li>
-<li><p><a class="reference external" href="https://sootlasten.github.io/2017/gradient-steepest-ascent/">https://sootlasten.github.io/2017/gradient-steepest-ascent/</a></p></li>
+<li><p>Zhang, Aston, Zachary C. Lipton, Mu Li, and Alexander J. Smola. “Chapter 12.3 Gradient Descent.” In Dive into Deep Learning. Berkeley: 2021</p></li>
+<li><p><a class="reference external" href="https://www.khanacademy.org/math/multivariable-calculus/multivariable-derivatives/partial-derivative-and-gradient-articles/a/the-gradient">Khan’s Academy: Gradient</a></p></li>
 </ul>
 <hr class="footnotes docutils" />
 <dl class="footnote brackets">
@@ -825,26 +809,14 @@ you can read to learn more about gradient descent.</p>
 <dt class="label" id="epsilon"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
 <dd><p><span class="math notranslate nohighlight">\(\epsilon\)</span> is often denoted <span class="math notranslate nohighlight">\(h\)</span> in the limit definition of derivatives.</p>
 </dd>
-<dt class="label" id="partial-x-intuition"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
-<dd><p><a class="reference external" href="https://sootlasten.github.io/2017/gradient-steepest-ascent/">Proof That the Gradient Points in the Direction of Steepest Ascent</a>: Sten Sootla’s Blog, Sten Sootla, March 15, 2017.</p>
-</dd>
-<dt class="label" id="partial-y-intuition"><span class="brackets"><a class="fn-backref" href="#id4">4</a></span></dt>
-<dd><p><a class="reference external" href="https://sootlasten.github.io/2017/gradient-steepest-ascent/">Proof That the Gradient Points in the Direction of Steepest Ascent</a>: Sten Sootla’s Blog, Sten Sootla, March 15, 2017.</p>
-</dd>
-<dt class="label" id="partial-xy-intuition"><span class="brackets"><a class="fn-backref" href="#id5">5</a></span></dt>
-<dd><p><a class="reference external" href="https://sootlasten.github.io/2017/gradient-steepest-ascent/">Proof That the Gradient Points in the Direction of Steepest Ascent</a>: Sten Sootla’s Blog, Sten Sootla, March 15, 2017.</p>
-</dd>
-<dt class="label" id="unit-vector-1"><span class="brackets"><a class="fn-backref" href="#id6">6</a></span></dt>
+<dt class="label" id="unit-vector-1"><span class="brackets"><a class="fn-backref" href="#id6">3</a></span></dt>
 <dd><p><a class="reference external" href="https://math.stackexchange.com/questions/1486767/why-in-a-directional-derivative-it-has-to-be-a-unit-vector#:~:text=If%20you%20don%27t%20use,the%20magnitude%20of%20the%20vector.&amp;text=That%20is%20a%20way%20to,to%20use%20a%20unit%20vector">Why in a directional derivative it has to be a unit vector</a></p>
 </dd>
-<dt class="label" id="unit-vector-2"><span class="brackets"><a class="fn-backref" href="#id7">7</a></span></dt>
+<dt class="label" id="unit-vector-2"><span class="brackets"><a class="fn-backref" href="#id7">4</a></span></dt>
 <dd><p><a class="reference external" href="https://math.stackexchange.com/questions/809376/why-normalize-and-the-definition-of-directional-derivative">why normalize and the definition of directional derivative</a></p>
 </dd>
-<dt class="label" id="gradient-directional-derivative-difference"><span class="brackets"><a class="fn-backref" href="#id8">8</a></span></dt>
+<dt class="label" id="gradient-directional-derivative-difference"><span class="brackets"><a class="fn-backref" href="#id8">5</a></span></dt>
 <dd><p><a class="reference external" href="https://math.stackexchange.com/questions/661195/what-is-the-difference-between-the-gradient-and-the-directional-derivative">What is the difference between the gradient and the directional derivative?</a></p>
-</dd>
-<dt class="label" id="proof-rate-of-change-is-magnitude-of-grad-vec"><span class="brackets"><a class="fn-backref" href="#id9">9</a></span></dt>
-<dd><p><a class="reference external" href="https://sootlasten.github.io/2017/gradient-steepest-ascent/">Proof the magnitude of the gradient vector is exactly the rate of change in that direction</a>: Sten Sootla’s Blog, Sten Sootla, March 15, 2017.</p>
 </dd>
 </dl>
 </section>

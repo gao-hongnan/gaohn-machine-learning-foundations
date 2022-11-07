@@ -182,7 +182,7 @@ $$
 $$ (partial_x)
 
 equation {eq}`partial_x` answers the question: 
-how much does the value of $f$ change when we hold $y$ constant and nudge $x$ by a small amount in the $x$ direction (i.e. in the direction pointed to by the vector $\begin{bmatrix} 1 & 0 \end{bmatrix}^\top$)?[^partial_x_intuition]
+how much does the value of $f$ change when we hold $y$ constant and nudge $x$ by a small amount in the $x$ direction (i.e. in the direction pointed to by the vector $\begin{bmatrix} 1 & 0 \end{bmatrix}^\top$) {cite}`sten`.
 
 In a similar vein, given the partial derivative
 
@@ -193,7 +193,7 @@ $$
 $$ (partial_y)
 
 equation {eq}`partial_y` answers the question:
-how much does the value of $f$ change when we hold $x$ constant and nudge $y$ by a small amount in the $y$ direction (i.e. in the direction pointed to by the vector $\begin{bmatrix} 0 & 1 \end{bmatrix}^\top$)?[^partial_y_intuition]
+how much does the value of $f$ change when we hold $x$ constant and nudge $y$ by a small amount in the $y$ direction (i.e. in the direction pointed to by the vector $\begin{bmatrix} 0 & 1 \end{bmatrix}^\top$) {cite}`sten`.
 
 Finally, it is often useful to note that $x$ and $y$ can move in tandem (i.e. we do not hold any of them constant), how do we then calculate how much $f$ changes when we nudge both $x$ and $y$ by a small amount. 
 Note that moving $x$ and $y$ both by $a$ and $b$ respectively is synonymous with moving the point $(x, y)$ by the vector $\begin{bmatrix} a & b \end{bmatrix}^\top$. With vector in the playing field, we now attach the notion of a "direction".
@@ -210,7 +210,7 @@ In vector terms, this means we moved $(x, y)$ in the direction $\begin{bmatrix} 
 
 More generically, let $x$ and $y$ move $a$ and $b$ units respectively, then we moved $(x, y)$ in the direction $\begin{bmatrix} a & b \end{bmatrix}^\top$.
 It turns out that the amount that $f$ changes when we move in the $\v = \begin{bmatrix} a & b \end{bmatrix}^\top$ direction is exactly how much 
-$f$ changes when we move $a$ units along the $x$ axis and $b$ units along the $y$ axis[^partial_xy_intuition]. 
+$f$ changes when we move $a$ units along the $x$ axis and $b$ units along the $y$ axis {cite}`sten`.
 
 Recall that we **know** how much $f$ changes when we move $x$ by 1 unit: 
 
@@ -393,7 +393,7 @@ It turns out this direction/unit vector we are finding is the gradient vector $\
 As a result, we can then say that $f$ increases the fastest when we move in the direction of the gradient vector $\nabla f(\x)$.
 
 It is worth noting that the rate of change of $f$ at a point $\x$ in the direction of the gradient vector $\nabla f(\x)$
-is given by the magnitude of the gradient vector itself.[^proof_rate_of_change_is_magnitude_of_grad_vec]
+is given by the magnitude of the gradient vector itself {cite}`sten`.
 ```
 
 We finally convinced ourselves that subtracting the gradient vector indeed (local) minimizes the objective/loss function provided it's differentiable.
@@ -406,21 +406,13 @@ Gradient Descent is a big topic as it is the heart of many machine learning algo
 Being a subset of the broader topic of optimization, there are many resources that
 you can read to learn more about gradient descent.
 
+- Zhang, Aston, Zachary C. Lipton, Mu Li, and Alexander J. Smola. "Chapter 12.3 Gradient Descent." In Dive into Deep Learning. Berkeley: 2021
+- [Khan's Academy: Gradient](https://www.khanacademy.org/math/multivariable-calculus/multivariable-derivatives/partial-derivative-and-gradient-articles/a/the-gradient)
 
-- [D2L Chapter 12.3 Gradient Descent](https://d2l.ai/chapter_optimization/gd.html)
-
-## Bibliography.
-
-- https://www.khanacademy.org/math/multivariable-calculus/multivariable-derivatives/partial-derivative-and-gradient-articles/a/the-gradient
-- https://sootlasten.github.io/2017/gradient-steepest-ascent/
   
 
 [^gradient_descent_intro]: **"Gradient Descent," Wikipedia (Wikimedia Foundation, June 28, 2022), https://en.wikipedia.org/wiki/Gradient_descent.**
 [^epsilon]: $\epsilon$ is often denoted $h$ in the limit definition of derivatives.
-[^partial_x_intuition]: [Proof That the Gradient Points in the Direction of Steepest Ascent](https://sootlasten.github.io/2017/gradient-steepest-ascent/): Sten Sootla's Blog, Sten Sootla, March 15, 2017.
-[^partial_y_intuition]: [Proof That the Gradient Points in the Direction of Steepest Ascent](https://sootlasten.github.io/2017/gradient-steepest-ascent/): Sten Sootla's Blog, Sten Sootla, March 15, 2017. 
-[^partial_xy_intuition]: [Proof That the Gradient Points in the Direction of Steepest Ascent](https://sootlasten.github.io/2017/gradient-steepest-ascent/): Sten Sootla's Blog, Sten Sootla, March 15, 2017. 
 [^unit_vector_1]: [Why in a directional derivative it has to be a unit vector](https://math.stackexchange.com/questions/1486767/why-in-a-directional-derivative-it-has-to-be-a-unit-vector#:~:text=If%20you%20don't%20use,the%20magnitude%20of%20the%20vector.&text=That%20is%20a%20way%20to,to%20use%20a%20unit%20vector)
 [^unit_vector_2]: [why normalize and the definition of directional derivative](https://math.stackexchange.com/questions/809376/why-normalize-and-the-definition-of-directional-derivative)
 [^gradient_directional_derivative_difference]: [What is the difference between the gradient and the directional derivative?](https://math.stackexchange.com/questions/661195/what-is-the-difference-between-the-gradient-and-the-directional-derivative)
-[^proof_rate_of_change_is_magnitude_of_grad_vec]: [Proof the magnitude of the gradient vector is exactly the rate of change in that direction](https://sootlasten.github.io/2017/gradient-steepest-ascent/): Sten Sootla's Blog, Sten Sootla, March 15, 2017.

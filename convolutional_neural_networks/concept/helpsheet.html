@@ -53,7 +53,7 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../../_static/sphinx-thebe.js"></script>
-    <script>window.MathJax = {"tex": {"macros": {"X": "\\symbf{X}", "st": "\\mid", "S": "\\Omega", "P": "\\mathbb{P}", "R": "\\mathbb{R}", "v": "\\mathbf{v}", "a": "\\mathbf{a}", "b": "\\mathbf{b}", "c": "\\mathbf{c}", "u": "\\mathbf{u}", "w": "\\mathbf{w}", "x": "\\mathbf{x}", "y": "\\mathbf{y}", "z": "\\mathbf{z}", "0": "\\mathbf{0}", "1": "\\mathbf{1}", "A": "\\mathbf{A}", "B": "\\mathbf{B}", "C": "\\mathbf{C}", "E": "\\mathcal{F}", "lset": "\\left\\{", "rset": "\\right\\}", "lsq": "\\left[", "rsq": "\\right]", "pmf": "p_X", "cdf": "F_X", "pspace": "(\\Omega, \\mathcal{F}, \\mathbb{P})"}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script>window.MathJax = {"tex": {"macros": {"X": "\\symbf{X}", "st": "\\mid", "S": "\\Omega", "P": "\\mathbb{P}", "R": "\\mathbb{R}", "v": "\\mathbf{v}", "a": "\\mathbf{a}", "b": "\\mathbf{b}", "c": "\\mathbf{c}", "u": "\\mathbf{u}", "w": "\\mathbf{w}", "x": "\\mathbf{x}", "y": "\\mathbf{y}", "z": "\\mathbf{z}", "0": "\\mathbf{0}", "1": "\\mathbf{1}", "A": "\\mathbf{A}", "B": "\\mathbf{B}", "C": "\\mathbf{C}", "E": "\\mathcal{F}", "lset": "\\left\\{", "rset": "\\right\\}", "lsq": "\\left[", "rsq": "\\right]", "lpar": "\\left(", "rpar": "\\right)", "pmf": "p_X", "cdf": "F_X", "pspace": "(\\Omega, \\mathcal{F}, \\mathbb{P})"}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -366,6 +366,16 @@ title="Print to PDF"
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#feature-map-output-dimensions">
+   Feature Map (Output) Dimensions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#convolutions-over-volumes">
+   Convolutions over Volumes
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#summary">
    Summary
   </a>
@@ -422,6 +432,16 @@ title="Print to PDF"
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#stride">
    Stride
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#feature-map-output-dimensions">
+   Feature Map (Output) Dimensions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#convolutions-over-volumes">
+   Convolutions over Volumes
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -576,11 +596,41 @@ Further, we assumed that <span class="math notranslate nohighlight">\(k_h = k_w\
 </div></section>
 <section id="stride">
 <h2>Stride<a class="headerlink" href="#stride" title="Permalink to this headline">#</a></h2>
-<div class="proof definition admonition" id="definition-14">
+<div class="proof definition admonition" id="def_stride">
 <p class="admonition-title"><span class="caption-number">Definition 10 </span> (Stride)</p>
 <section class="definition-content" id="proof-content">
+<p>In the context of Convolutional Neural Networks, the <strong>stride</strong> is the number of pixels we shift the kernel over the image.</p>
 </section>
 </div></section>
+<section id="feature-map-output-dimensions">
+<h2>Feature Map (Output) Dimensions<a class="headerlink" href="#feature-map-output-dimensions" title="Permalink to this headline">#</a></h2>
+<div class="proof definition admonition" id="def_calculating_output_dimensions">
+<p class="admonition-title"><span class="caption-number">Definition 11 </span> (Calculating Output Dimensions)</p>
+<section class="definition-content" id="proof-content">
+<p>Given an input image <span class="math notranslate nohighlight">\(\X\)</span> of size <span class="math notranslate nohighlight">\(n \times n\)</span>, a kernel of size <span class="math notranslate nohighlight">\(k \times k\)</span>,
+a padding of size <span class="math notranslate nohighlight">\(p\)</span>, and a stride of size <span class="math notranslate nohighlight">\(s \times s\)</span>, the output dimensions are given by:</p>
+<div class="math notranslate nohighlight">
+\[
+\lpar \lfloor \frac{n + 2p - k}{s} \rfloor + 1 \rpar \times \lpar \lfloor \frac{n + 2p - k}{s} \rfloor + 1 \rpar
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\lfloor x \rfloor\)</span> is the floor function.</p>
+</section>
+</div></section>
+<section id="convolutions-over-volumes">
+<h2>Convolutions over Volumes<a class="headerlink" href="#convolutions-over-volumes" title="Permalink to this headline">#</a></h2>
+<p>So far we have only discussed convolutions over 2D images. However, we can also apply convolutions over 3D volumes (i.e. RGB images with 3 channels).</p>
+<p>For example, we can apply convolutions over a 3D volume of size <span class="math notranslate nohighlight">\(n_h \times n_w \times n_c\)</span> where <span class="math notranslate nohighlight">\(n_c\)</span> is the number of channels. In this case, the kernel is also a 3D volume of size <span class="math notranslate nohighlight">\(k_h \times k_w \times n_c\)</span>.</p>
+<link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+<script src="https://tikzjax.com/v1/tikzjax.js"></script>
+<script type="text/tikz">
+  \begin{tikzpicture}[scale=0.5]     \draw (0.5, 0.5) rectangle (3.5, 3.5);     \draw (0.25, 0.25) rectangle (3.25, 3.25); 
+    \draw (0, 0) rectangle (3, 3);
+    \node at (1.5, -.5) {$6 \times 6$};
+    \node (channels) at (6.75, .4) {$3$ channels};
+    \draw[->] (channels) to (3.5, .4);
+  \end{tikzpicture} 
+</script>
+</section>
 <section id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">#</a></h2>
 <div class="proof remark admonition" id="def_learning_filters_remark">
