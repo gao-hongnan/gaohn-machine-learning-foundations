@@ -1,3 +1,34 @@
+<div align="center">
+<h1>Machine Learning Foundations</a></h1>
+by Hongnan Gao
+Nov, 2022
+<br>
+</div>
+
+
+<h4 align="center">
+  <a href="https://gao-hongnan.github.io/gaohn-machine-learning-foundations/">Documentation</a>
+</h4>
+
+## Introduction
+
+This repository documents materials related to Machine Learning and Deep Learning.
+
+The bottom-up learning takes place in 3 phases:
+
+- **Conceptual Understanding**, where you learn the intuition, concepts and the mathematics behind the algorithms.
+More often than not, you might get stuck in this phase. It is important to keep going and not give up. Things
+may be clearer later on.
+- **Implementation**, where you implement the algorithms from scratch. This is the phase where you get to know
+the inner workings of the algorithms. Unfortunately, while knowing how to ***implement*** does not
+necessarily mean your ***understanding*** is deep, it is still a good way to learn and build towards
+a deeper understanding. It is particularly useful when your models spectacularly fail one day, and 
+you know exactly where to look for the bug.
+- **Application**, where you apply the algorithms to real-world problems. This is the phase where you
+try to connect the dots and see the big picture. 
+
+**Note that the implementation phase may not always be feasible.**
+
 ## Workflow
 
 ### Installation

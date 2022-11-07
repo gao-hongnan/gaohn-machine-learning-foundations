@@ -4,10 +4,17 @@
 format: jb-book
 root: intro.md
 parts:
+  - caption: Convolutional Neural Networks
+    chapters:
+      - file: convolutional_neural_networks/concept/helpsheet.md
   - caption: Optimization
     chapters:
-      - file: gradient_descent_concept.md
-      - file: gradient_descent_construction.ipynb
+      - file: optimization/concept/gradient_descent_concept.md
+      - file: optimization/implementation/gradient_descent_construction.ipynb
+
+  - caption: References
+    chapters:
+      - file: bibliography/bibliography.md
 
 
 

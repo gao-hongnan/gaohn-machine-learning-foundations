@@ -1,8 +1,14 @@
+autograd==1.5
+d2l==1.0.0a1.post0
 matplotlib==3.6.0
 numpy==1.23.3
 pandas==1.5.0
 seaborn==0.12.0
 scipy==1.9.1
+torch==1.12.1+cu113
+torchaudio===0.12.1+cu113
+torchvision==0.13.1+cu113
+torchinfo==1.7.1
 ghp-import==2.1.0
 black==21.9b0
 click==7.1.2

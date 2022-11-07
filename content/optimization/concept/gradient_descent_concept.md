@@ -52,7 +52,7 @@ Consequently, the meaning of the gradient in such a function is only well define
 Within this small neighbourhood, we can "loosely" visualize the portion of the function to be a "linear function" with a slope of $2$, as illustrated in the following figure.
 The enclosed green box is the neighborhood of $x = 2$, where if we zoom in, the portion of the function inside looks like a linear function with a slope of $2$.
 
-```{figure} ./assets/gradient_descent/neighbourhood.jpg
+```{figure} ../assets/gradient_descent/neighbourhood.jpg
 ---
 height: 300px
 width: 300px
@@ -65,8 +65,6 @@ Neighbourhood around x = 2.
 Indeed, if we set $\epsilon = 0.001$, then if $x = 2$, we have $f(x) = 4$; moving $x$ by $\epsilon$ from $x = 2$ to $x = 2.001$ 
 yields us $f(x) \approxeq 4.004$. We now see that $x$ increasing by $0.001$ unit indeed yields us an increase of $4.004 - 4 = 0.004$, 
 a factor of $4$ increase to the output $f(x)$.
-
----
 
 ## Gradient Vector
 
@@ -94,9 +92,6 @@ $$ (grad_vec)
 
 We can also replace the notation $\frac{\partial f(\x)}{\partial x_i}$ in equation {eq}`grad_vec` with $f_{x_i}$.
 ````
-
-
----
 
 ## Directional Derivatives
 
@@ -164,7 +159,6 @@ $$
 which evaluates to how much $f$ changes when it moves a small unit distance $h$ from $\x$ to $\x + h$ along the direction $\v$.
 ````
 
----
 
 (gradient_descent_concept.md:intuition-of-directional-derivative)=
 ### Intuition of Directional Derivative
@@ -244,7 +238,7 @@ Therefore, the linearity rule applies.
 If the above is still not obvious, then we can approach it geometrically. 
 Recall that we are mapping from $\R^2$ to $\R$, the below diagram illustrates the mapping.
 
-```{figure} ./assets/gradient_descent/geometric_r2_r1.jpg
+```{figure} ../assets/gradient_descent/geometric_r2_r1.jpg
 ---
 height: 300px
 width: 300px
@@ -253,8 +247,6 @@ name: directive-fig
 Geometric Intuition
 ```
 ````
-
----
 
 (gradient_descent_concept.md:theorem-the-direction-derivative)=
 ### Theorem (The Direction Derivative)
@@ -293,8 +285,6 @@ This has two consequences:
 2. Given the gradient vector of $f$ at $\x$ and a scalar value directional derivative $D_{\v}(f)$, we can recover the direction $\v$ by division.
 `````
 
----
-
 ### Difference between Gradient and Directional Derivative[^gradient_directional_derivative_difference]
 
 When I was learning multivariate calculus, I have had my fair share of trouble with the difference 
@@ -331,7 +321,7 @@ Consider the following example:
    
 - This unique direction points in the same direction as the gradient vector $\v$.
 
-```{figure} ./assets/gradient_descent/infinite_directions.jpg
+```{figure} ../assets/gradient_descent/infinite_directions.jpg
 ---
 height: 300px
 width: 300px
@@ -339,9 +329,6 @@ name: infinite_directions
 ---
 Infinite directions around a point in cross-sectional plane of 3d-figure.
 ```
-
----
-
 
 ## Gradient Points to the Direction of Steepest Ascent
 
@@ -394,7 +381,7 @@ where
 - Therefore, $\cos(\theta)$ is maximal when $\cos(\theta) = 1 \implies \theta = 0$.
 - Consequently, $\theta = 0$ implies $\nabla f(\x)$ and $\v$ are parallel.
 
-`````{admonition} Success
+```{admonition} Success
 :class: important
 
 At this point, we have answered the question posed: 
@@ -407,32 +394,26 @@ As a result, we can then say that $f$ increases the fastest when we move in the 
 
 It is worth noting that the rate of change of $f$ at a point $\x$ in the direction of the gradient vector $\nabla f(\x)$
 is given by the magnitude of the gradient vector itself.[^proof_rate_of_change_is_magnitude_of_grad_vec]
-`````
+```
 
 We finally convinced ourselves that subtracting the gradient vector indeed (local) minimizes the objective/loss function provided it's differentiable.
 
----
 
-## References
+## Further Readings
 
-### Further Readings
-
-```{note}
 Gradient Descent is a big topic as it is the heart of many machine learning algorithms.
 
 Being a subset of the broader topic of optimization, there are many resources that
 you can read to learn more about gradient descent.
-```
+
 
 - [D2L Chapter 12.3 Gradient Descent](https://d2l.ai/chapter_optimization/gd.html)
 
-### Bibliography.
+## Bibliography.
 
 - https://www.khanacademy.org/math/multivariable-calculus/multivariable-derivatives/partial-derivative-and-gradient-articles/a/the-gradient
 - https://sootlasten.github.io/2017/gradient-steepest-ascent/
   
-  
----
 
 [^gradient_descent_intro]: **"Gradient Descent," Wikipedia (Wikimedia Foundation, June 28, 2022), https://en.wikipedia.org/wiki/Gradient_descent.**
 [^epsilon]: $\epsilon$ is often denoted $h$ in the limit definition of derivatives.

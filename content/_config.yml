@@ -63,6 +63,7 @@ sphinx:
     mathjax3_config:
       tex:
         macros:
+          "X": "\\symbf{X}"
           "st": "\\mid"
           "S": "\\Omega"
           "P": "\\mathbb{P}"
