@@ -9,56 +9,56 @@
     <title>Gradient Descent Concept &#8212; Machine Learning Foundations</title>
     
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 
     
   <link rel="stylesheet"
-    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
   <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
   <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/tabs.css" />
-    <link rel="stylesheet" type="text/css" href="_static/proof.css" />
-    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/tabs.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
 
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/clipboard.min.js"></script>
-    <script src="_static/copybutton.js"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
-    <script src="_static/tabs.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="../../_static/tabs.js"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="_static/design-tabs.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
 const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
-    <script async="async" src="_static/sphinx-thebe.js"></script>
-    <script>window.MathJax = {"tex": {"macros": {"st": "\\mid", "S": "\\Omega", "P": "\\mathbb{P}", "R": "\\mathbb{R}", "v": "\\mathbf{v}", "a": "\\mathbf{a}", "b": "\\mathbf{b}", "c": "\\mathbf{c}", "u": "\\mathbf{u}", "w": "\\mathbf{w}", "x": "\\mathbf{x}", "y": "\\mathbf{y}", "z": "\\mathbf{z}", "0": "\\mathbf{0}", "1": "\\mathbf{1}", "A": "\\mathbf{A}", "B": "\\mathbf{B}", "C": "\\mathbf{C}", "E": "\\mathcal{F}", "lset": "\\left\\{", "rset": "\\right\\}", "lsq": "\\left[", "rsq": "\\right]", "pmf": "p_X", "cdf": "F_X", "pspace": "(\\Omega, \\mathcal{F}, \\mathbb{P})"}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"tex": {"macros": {"X": "\\symbf{X}", "st": "\\mid", "S": "\\Omega", "P": "\\mathbb{P}", "R": "\\mathbb{R}", "v": "\\mathbf{v}", "a": "\\mathbf{a}", "b": "\\mathbf{b}", "c": "\\mathbf{c}", "u": "\\mathbf{u}", "w": "\\mathbf{w}", "x": "\\mathbf{x}", "y": "\\mathbf{y}", "z": "\\mathbf{z}", "0": "\\mathbf{0}", "1": "\\mathbf{1}", "A": "\\mathbf{A}", "B": "\\mathbf{B}", "C": "\\mathbf{C}", "E": "\\mathcal{F}", "lset": "\\left\\{", "rset": "\\right\\}", "lsq": "\\left[", "rsq": "\\right]", "pmf": "p_X", "cdf": "F_X", "pspace": "(\\Omega, \\mathcal{F}, \\mathbb{P})"}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Gradient Descent Construction" href="gradient_descent_construction.html" />
-    <link rel="prev" title="Introduction" href="intro.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Gradient Descent Construction" href="../implementation/gradient_descent_construction.html" />
+    <link rel="prev" title="Helpsheet: Convolutional Neural Networks" href="../../convolutional_neural_networks/concept/helpsheet.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -93,19 +93,19 @@ const thebe_selector_output = ".output, .cell_output"
 <div class="bd-sidebar noprint" id="site-navigation">
     <div class="bd-sidebar__content">
         <div class="bd-sidebar__top"><div class="navbar-brand-box">
-    <a class="navbar-brand text-wrap" href="index.html">
+    <a class="navbar-brand text-wrap" href="../../index.html">
       
         <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
         
       
       
-      <img src="_static/logo.png" class="logo" alt="logo">
+      <img src="../../_static/logo.png" class="logo" alt="logo">
       
       
       <h1 class="site-logo" id="site-title">Machine Learning Foundations</h1>
       
     </a>
-</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -113,12 +113,24 @@ const thebe_selector_output = ".output, .cell_output"
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
-                <a class="reference internal" href="intro.html">
+                <a class="reference internal" href="../../intro.html">
                     Introduction
                 </a>
             </li>
         </ul>
         <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Convolutional Neural Networks
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../convolutional_neural_networks/concept/helpsheet.html">
+   Helpsheet: Convolutional Neural Networks
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Optimization
  </span>
@@ -130,8 +142,20 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="gradient_descent_construction.html">
+  <a class="reference internal" href="../implementation/gradient_descent_construction.html">
    Gradient Descent Construction
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../bibliography/bibliography.html">
+   Bibliography
   </a>
  </li>
 </ul>
@@ -224,7 +248,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/gao-hongnan/gaohn-machine-learning-foundations/issues/new?title=Issue%20on%20page%20%2Fgradient_descent_concept.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/gao-hongnan/gaohn-machine-learning-foundations/issues/new?title=Issue%20on%20page%20%2Foptimization/concept/gradient_descent_concept.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -252,7 +276,7 @@ title="Open an issue"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="_sources/gradient_descent_concept.md"
+        <a href="../../_sources/optimization/concept/gradient_descent_concept.md"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -354,21 +378,14 @@ title="Print to PDF"
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#references">
-   References
+  <a class="reference internal nav-link" href="#further-readings">
+   Further Readings
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#further-readings">
-     Further Readings
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#bibliography">
-     Bibliography.
-    </a>
-   </li>
-  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#bibliography">
+   Bibliography.
+  </a>
  </li>
 </ul>
 
@@ -432,21 +449,14 @@ title="Print to PDF"
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#references">
-   References
+  <a class="reference internal nav-link" href="#further-readings">
+   Further Readings
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#further-readings">
-     Further Readings
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#bibliography">
-     Bibliography.
-    </a>
-   </li>
-  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#bibliography">
+   Bibliography.
+  </a>
  </li>
 </ul>
 
@@ -504,20 +514,19 @@ Consequently, the meaning of the gradient in such a function is only well define
 Within this small neighbourhood, we can “loosely” visualize the portion of the function to be a “linear function” with a slope of <span class="math notranslate nohighlight">\(2\)</span>, as illustrated in the following figure.
 The enclosed green box is the neighborhood of <span class="math notranslate nohighlight">\(x = 2\)</span>, where if we zoom in, the portion of the function inside looks like a linear function with a slope of <span class="math notranslate nohighlight">\(2\)</span>.</p>
 <figure class="align-default" id="neighbourhood">
-<a class="reference internal image-reference" href="_images/neighbourhood.jpg"><img alt="_images/neighbourhood.jpg" src="_images/neighbourhood.jpg" style="width: 300px; height: 300px;" /></a>
+<a class="reference internal image-reference" href="../../_images/neighbourhood.jpg"><img alt="../../_images/neighbourhood.jpg" src="../../_images/neighbourhood.jpg" style="width: 300px; height: 300px;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Neighbourhood around x = 2.</span><a class="headerlink" href="#neighbourhood" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 3 </span><span class="caption-text">Neighbourhood around x = 2.</span><a class="headerlink" href="#neighbourhood" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p>Indeed, if we set <span class="math notranslate nohighlight">\(\epsilon = 0.001\)</span>, then if <span class="math notranslate nohighlight">\(x = 2\)</span>, we have <span class="math notranslate nohighlight">\(f(x) = 4\)</span>; moving <span class="math notranslate nohighlight">\(x\)</span> by <span class="math notranslate nohighlight">\(\epsilon\)</span> from <span class="math notranslate nohighlight">\(x = 2\)</span> to <span class="math notranslate nohighlight">\(x = 2.001\)</span>
 yields us <span class="math notranslate nohighlight">\(f(x) \approxeq 4.004\)</span>. We now see that <span class="math notranslate nohighlight">\(x\)</span> increasing by <span class="math notranslate nohighlight">\(0.001\)</span> unit indeed yields us an increase of <span class="math notranslate nohighlight">\(4.004 - 4 = 0.004\)</span>,
 a factor of <span class="math notranslate nohighlight">\(4\)</span> increase to the output <span class="math notranslate nohighlight">\(f(x)\)</span>.</p>
 </section>
-<hr class="docutils" />
 <section id="gradient-vector">
 <h2>Gradient Vector<a class="headerlink" href="#gradient-vector" title="Permalink to this headline">#</a></h2>
 <div class="proof definition admonition" id="grad_vec">
-<p class="admonition-title"><span class="caption-number">Definition 1 </span> (Gradient Vector)</p>
+<p class="admonition-title"><span class="caption-number">Definition 11 </span> (Gradient Vector)</p>
 <section class="definition-content" id="proof-content">
 <p>Let <span class="math notranslate nohighlight">\(f: \R^n \to \R\)</span> be a function that maps <span class="math notranslate nohighlight">\(\x\)</span> to <span class="math notranslate nohighlight">\(f(\x)\)</span>:</p>
 <div class="math notranslate nohighlight">
@@ -538,11 +547,10 @@ f \colon \R^n &amp;\longrightarrow \R \\
 <p>We can also replace the notation <span class="math notranslate nohighlight">\(\frac{\partial f(\x)}{\partial x_i}\)</span> in equation <a class="reference internal" href="#equation-grad-vec">(1)</a> with <span class="math notranslate nohighlight">\(f_{x_i}\)</span>.</p>
 </section>
 </div></section>
-<hr class="docutils" />
 <section id="directional-derivatives">
 <h2>Directional Derivatives<a class="headerlink" href="#directional-derivatives" title="Permalink to this headline">#</a></h2>
 <div class="proof definition admonition" id="definition-2">
-<p class="admonition-title"><span class="caption-number">Definition 2 </span> (Directional Derivative)</p>
+<p class="admonition-title"><span class="caption-number">Definition 12 </span> (Directional Derivative)</p>
 <section class="definition-content" id="proof-content">
 <p>Let <span class="math notranslate nohighlight">\(f: \R^n \to \R\)</span> be a function that maps <span class="math notranslate nohighlight">\(\x\)</span> to <span class="math notranslate nohighlight">\(f(\x)\)</span>:</p>
 <div class="math notranslate nohighlight">
@@ -596,8 +604,7 @@ D_{\v}(f(1, 1)) &amp;= \lim_{h \to 0} \frac{f(\x + h\v) - f(\x)}{h} \\
 \end{split}\]</div>
 <p>which evaluates to how much <span class="math notranslate nohighlight">\(f\)</span> changes when it moves a small unit distance <span class="math notranslate nohighlight">\(h\)</span> from <span class="math notranslate nohighlight">\(\x\)</span> to <span class="math notranslate nohighlight">\(\x + h\)</span> along the direction <span class="math notranslate nohighlight">\(\v\)</span>.</p>
 </section>
-</div><hr class="docutils" />
-<section id="intuition-of-directional-derivative">
+</div><section id="intuition-of-directional-derivative">
 <span id="gradient-descent-concept-md-intuition-of-directional-derivative"></span><h3>Intuition of Directional Derivative<a class="headerlink" href="#intuition-of-directional-derivative" title="Permalink to this headline">#</a></h3>
 <p>This section builds up to an important derivation of the idea of the directional derivative.</p>
 <div class="admonition warning">
@@ -663,14 +670,13 @@ Therefore, the linearity rule applies.</p>
 <p>If the above is still not obvious, then we can approach it geometrically.
 Recall that we are mapping from <span class="math notranslate nohighlight">\(\R^2\)</span> to <span class="math notranslate nohighlight">\(\R\)</span>, the below diagram illustrates the mapping.</p>
 <figure class="align-default" id="directive-fig">
-<a class="reference internal image-reference" href="_images/geometric_r2_r1.jpg"><img alt="_images/geometric_r2_r1.jpg" src="_images/geometric_r2_r1.jpg" style="width: 300px; height: 300px;" /></a>
+<a class="reference internal image-reference" href="../../_images/geometric_r2_r1.jpg"><img alt="../../_images/geometric_r2_r1.jpg" src="../../_images/geometric_r2_r1.jpg" style="width: 300px; height: 300px;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Geometric Intuition</span><a class="headerlink" href="#directive-fig" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 4 </span><span class="caption-text">Geometric Intuition</span><a class="headerlink" href="#directive-fig" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
-</div><hr class="docutils" />
-</section>
+</div></section>
 <section id="theorem-the-direction-derivative">
 <span id="gradient-descent-concept-md-theorem-the-direction-derivative"></span><h3>Theorem (The Direction Derivative)<a class="headerlink" href="#theorem-the-direction-derivative" title="Permalink to this headline">#</a></h3>
 <p>The intuition <a class="reference internal" href="#gradient-descent-concept-md-intuition-of-directional-derivative"><span class="std std-ref">developed in the previous section</span></a> allows us to
@@ -700,7 +706,6 @@ However, the usage of unit vector simplifies the derivation and other applicatio
 </ol>
 </div>
 </section>
-<hr class="docutils" />
 <section id="difference-between-gradient-and-directional-derivative">
 <h3>Difference between Gradient and Directional Derivative<a class="footnote-reference brackets" href="#gradient-directional-derivative-difference" id="id8">8</a><a class="headerlink" href="#difference-between-gradient-and-directional-derivative" title="Permalink to this headline">#</a></h3>
 <p>When I was learning multivariate calculus, I have had my fair share of trouble with the difference
@@ -735,14 +740,13 @@ Since this function can be graphed in 3-dimensions, we can visualize that there 
 <li><p>This unique direction points in the same direction as the gradient vector <span class="math notranslate nohighlight">\(\v\)</span>.</p></li>
 </ul>
 <figure class="align-default" id="infinite-directions">
-<a class="reference internal image-reference" href="_images/infinite_directions.jpg"><img alt="_images/infinite_directions.jpg" src="_images/infinite_directions.jpg" style="width: 300px; height: 300px;" /></a>
+<a class="reference internal image-reference" href="../../_images/infinite_directions.jpg"><img alt="../../_images/infinite_directions.jpg" src="../../_images/infinite_directions.jpg" style="width: 300px; height: 300px;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 3 </span><span class="caption-text">Infinite directions around a point in cross-sectional plane of 3d-figure.</span><a class="headerlink" href="#infinite-directions" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 5 </span><span class="caption-text">Infinite directions around a point in cross-sectional plane of 3d-figure.</span><a class="headerlink" href="#infinite-directions" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
 </section>
-<hr class="docutils" />
 <section id="gradient-points-to-the-direction-of-steepest-ascent">
 <h2>Gradient Points to the Direction of Steepest Ascent<a class="headerlink" href="#gradient-points-to-the-direction-of-steepest-ascent" title="Permalink to this headline">#</a></h2>
 <p>We finally have the necessary definitions and theorems to prove the following statement:</p>
@@ -798,28 +802,21 @@ is given by the magnitude of the gradient vector itself.<a class="footnote-refer
 </div>
 <p>We finally convinced ourselves that subtracting the gradient vector indeed (local) minimizes the objective/loss function provided it’s differentiable.</p>
 </section>
-<hr class="docutils" />
-<section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">#</a></h2>
 <section id="further-readings">
-<h3>Further Readings<a class="headerlink" href="#further-readings" title="Permalink to this headline">#</a></h3>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
+<h2>Further Readings<a class="headerlink" href="#further-readings" title="Permalink to this headline">#</a></h2>
 <p>Gradient Descent is a big topic as it is the heart of many machine learning algorithms.</p>
 <p>Being a subset of the broader topic of optimization, there are many resources that
 you can read to learn more about gradient descent.</p>
-</div>
 <ul class="simple">
 <li><p><a class="reference external" href="https://d2l.ai/chapter_optimization/gd.html">D2L Chapter 12.3 Gradient Descent</a></p></li>
 </ul>
 </section>
 <section id="bibliography">
-<h3>Bibliography.<a class="headerlink" href="#bibliography" title="Permalink to this headline">#</a></h3>
+<h2>Bibliography.<a class="headerlink" href="#bibliography" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.khanacademy.org/math/multivariable-calculus/multivariable-derivatives/partial-derivative-and-gradient-articles/a/the-gradient">https://www.khanacademy.org/math/multivariable-calculus/multivariable-derivatives/partial-derivative-and-gradient-articles/a/the-gradient</a></p></li>
 <li><p><a class="reference external" href="https://sootlasten.github.io/2017/gradient-steepest-ascent/">https://sootlasten.github.io/2017/gradient-steepest-ascent/</a></p></li>
 </ul>
-<hr class="docutils" />
 <hr class="footnotes docutils" />
 <dl class="footnote brackets">
 <dt class="label" id="gradient-descent-intro"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
@@ -852,7 +849,6 @@ you can read to learn more about gradient descent.</p>
 </dl>
 </section>
 </section>
-</section>
 
     <script type="text/x-thebe-config">
     {
@@ -867,7 +863,7 @@ you can read to learn more about gradient descent.</p>
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./."
+            path: "./optimization/concept"
         },
         predefinedOutput: true
     }
@@ -881,14 +877,14 @@ you can read to learn more about gradient descent.</p>
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="intro.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="../../convolutional_neural_networks/concept/helpsheet.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Introduction</p>
+            <p class="prev-next-title">Helpsheet: Convolutional Neural Networks</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="gradient_descent_construction.html" title="next page">
+    <a class='right-next' id="next-link" href="../implementation/gradient_descent_construction.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
         <p class="prev-next-title">Gradient Descent Construction</p>
@@ -916,7 +912,7 @@ you can read to learn more about gradient descent.</p>
     </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
 
 
   </body>
