@@ -157,9 +157,44 @@ Further, we assumed that $k_h = k_w$ is odd, if not, we may to apply floor and c
 ## Stride
 
 ```{prf:definition} Stride
+:label: def_stride
 
+In the context of Convolutional Neural Networks, the **stride** is the number of pixels we shift the kernel over the image.
 ```
 
+## Feature Map (Output) Dimensions
+
+```{prf:definition} Calculating Output Dimensions
+:label: def_calculating_output_dimensions
+
+Given an input image $\X$ of size $n \times n$, a kernel of size $k \times k$, 
+a padding of size $p$, and a stride of size $s \times s$, the output dimensions are given by:
+
+$$
+\lpar \lfloor \frac{n + 2p - k}{s} \rfloor + 1 \rpar \times \lpar \lfloor \frac{n + 2p - k}{s} \rfloor + 1 \rpar
+$$
+
+where $\lfloor x \rfloor$ is the floor function.
+```
+
+## Convolutions over Volumes
+
+So far we have only discussed convolutions over 2D images. However, we can also apply convolutions over 3D volumes (i.e. RGB images with 3 channels).
+
+
+For example, we can apply convolutions over a 3D volume of size $n_h \times n_w \times n_c$ where $n_c$ is the number of channels. In this case, the kernel is also a 3D volume of size $k_h \times k_w \times n_c$.
+<link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+<script src="https://tikzjax.com/v1/tikzjax.js"></script>
+
+
+<script type="text/tikz">
+  \begin{tikzpicture}[scale=0.5]     \draw (0.5, 0.5) rectangle (3.5, 3.5);     \draw (0.25, 0.25) rectangle (3.25, 3.25); 
+    \draw (0, 0) rectangle (3, 3);
+    \node at (1.5, -.5) {$6 \times 6$};
+    \node (channels) at (6.75, .4) {$3$ channels};
+    \draw[->] (channels) to (3.5, .4);
+  \end{tikzpicture} 
+</script>
 
 ## Summary
 
