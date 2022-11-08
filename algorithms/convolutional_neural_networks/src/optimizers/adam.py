@@ -51,7 +51,7 @@ class Adam(Optimizer):
             dw = self._cache_v[dw_key] / (np.sqrt(self._cache_s[dw_key]) + self._eps)
             db = self._cache_v[db_key] / (np.sqrt(self._cache_s[db_key]) + self._eps)
 
-            layer.set_wights(w=w - self._lr * dw, b=b - self._lr * db)
+            layer.set_weights(w=w - self._lr * dw, b=b - self._lr * db)
 
     def _init_cache(self, layers: List[Layer]) -> None:
         for idx, layer in enumerate(layers):

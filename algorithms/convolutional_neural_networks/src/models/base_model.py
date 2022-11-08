@@ -54,6 +54,7 @@ class SequentialModel:
 
                 y_hat_batch = self._forward(x_batch, training=True)
                 activation = y_hat_batch - y_batch
+
                 self._backward(activation)
                 self._update()
                 n_start = idx * bs
@@ -98,8 +99,12 @@ class SequentialModel:
 
     def _forward(self, x: np.array, training: bool) -> np.array:
         activation = x
+
         for idx, layer in enumerate(self._layers):
+            # print(activation.shape)
+            # print(layer)
             activation = layer.forward_pass(a_prev=activation, training=training)
+
         return activation
 
     def _backward(self, x: np.array) -> None:

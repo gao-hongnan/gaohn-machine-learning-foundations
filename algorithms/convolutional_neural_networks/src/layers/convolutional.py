@@ -1,16 +1,25 @@
 from __future__ import annotations
-
 import sys
 
 sys.path.append(
     r"C:\Users\gaohn\gao_hongnan\gaohn-machine-learning-foundations\algorithms\convolutional_neural_networks"
 )
 
+try:
+    from src.cs231n.fast_conv_cython import col2im_cython, im2col_cython
+except ImportError:
+    print("run the following from the cs231n directory and try again:")
+    print("cd to cs231n directory")
+    print("python setup.py build_ext --inplace")
+    print("You may also need to restart your iPython kernel")
+
+
 from typing import Tuple, Optional
 
 import numpy as np
 
 from src.base import Layer
+from src.cs231n.fast_conv import im2col, col2im
 
 
 class ConvLayer2D(Layer):
@@ -231,6 +240,95 @@ class ConvLayer2D(Layer):
             pad_width=((0, 0), (pad[0], pad[0]), (pad[1], pad[1]), (0, 0)),
             mode="constant",
         )
+
+
+class SuperFastConvLayer2D(ConvLayer2D):
+    def __init__(
+        self, w: np.array, b: np.array, padding: str = "valid", stride: int = 1
+    ):
+        """
+        :param w -  4D tensor with shape (h_f, w_f, c_f, n_f)
+        :param b - 1D tensor with shape (n_f, )
+        :param padding - flag describing type of activation padding valid/same
+        :param stride - stride along width and height of input volume
+        ------------------------------------------------------------------------
+        h_f - height of filter volume
+        w_f - width of filter volume
+        c_f - number of channels of filter volume
+        n_f - number of filters in filter volume
+        """
+        super(SuperFastConvLayer2D, self).__init__(
+            w=w, b=b, padding=padding, stride=stride
+        )
+        self._cols = None
+
+    def forward_pass(self, a_prev: np.array, training: bool) -> np.array:
+        """
+        :param a_prev - 4D tensor with shape (n, h_in, w_in, c)
+        :output 4D tensor with shape (n, h_out, w_out, n_f)
+        ------------------------------------------------------------------------
+        n - number of examples in batch
+        w_in - width of input volume
+        h_in - width of input volume
+        w_out - width of input volume
+        h_out - width of input volume
+        c - number of channels of the input volume
+        n_f - number of filters in filter volume
+        """
+        self._a_prev = np.array(a_prev, copy=True)
+        n, h_out, w_out, _ = self.calculate_output_dims(input_dims=a_prev.shape)
+        h_f, w_f, _, n_f = self._w.shape
+        pad = self.calculate_pad_dims()
+        w = np.transpose(self._w, (3, 2, 0, 1))
+
+        self._cols = im2col_cython(
+            np.moveaxis(a_prev, -1, 1), h_f, w_f, pad[0], self._stride
+        )
+
+        result = w.reshape((n_f, -1)).dot(self._cols)
+        output = result.reshape(n_f, h_out, w_out, n)
+
+        return output.transpose(3, 1, 2, 0) + self._b
+
+    def backward_pass(self, da_curr: np.array) -> np.array:
+        """
+        :param da_curr - 4D tensor with shape (n, h_out, w_out, n_f)
+        :output 4D tensor with shape (n, h_in, w_in, c)
+        ------------------------------------------------------------------------
+        n - number of examples in batch
+        w_in - width of input volume
+        h_in - width of input volume
+        w_out - width of input volume
+        h_out - width of input volume
+        c - number of channels of the input volume
+        n_f - number of filters in filter volume
+        """
+        n, h_out, w_out, _ = self.calculate_output_dims(input_dims=self._a_prev.shape)
+        h_f, w_f, _, n_f = self._w.shape
+        pad = self.calculate_pad_dims()
+
+        self._db = da_curr.sum(axis=(0, 1, 2)) / n
+        da_curr_reshaped = da_curr.transpose(3, 1, 2, 0).reshape(n_f, -1)
+
+        w = np.transpose(self._w, (3, 2, 0, 1))
+        dw = da_curr_reshaped.dot(self._cols.T).reshape(w.shape)
+        self._dw = np.transpose(dw, (2, 3, 1, 0))
+
+        output_cols = w.reshape(n_f, -1).T.dot(da_curr_reshaped)
+
+        a_prev = np.moveaxis(self._a_prev, -1, 1)
+        output = col2im_cython(
+            output_cols,
+            a_prev.shape[0],
+            a_prev.shape[1],
+            a_prev.shape[2],
+            a_prev.shape[3],
+            h_f,
+            w_f,
+            pad[0],
+            self._stride,
+        )
+        return np.transpose(output, (0, 2, 3, 1))
 
 
 if __name__ == "__main__":

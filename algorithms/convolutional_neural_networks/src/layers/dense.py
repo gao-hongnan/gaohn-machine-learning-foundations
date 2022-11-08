@@ -66,7 +66,7 @@ class DenseLayer(Layer):
         self._db = np.sum(da_curr, axis=0, keepdims=True) / n
         return np.dot(da_curr, self._w)
 
-    def set_wights(self, w: np.array, b: np.array) -> None:
+    def set_weights(self, w: np.array, b: np.array) -> None:
         """
         :param w - 2D weights tensor with shape (units_curr, units_prev)
         :param b - 1D bias tensor with shape (1, units_curr)

@@ -35,7 +35,6 @@ class Layer(ABC):
     def backward_pass(self, da_curr: torch.Tensor) -> torch.Tensor:
         """Perform layer backward propagation logic."""
 
-    @abstractmethod
     def set_weights(self, w: torch.Tensor, b: torch.Tensor) -> None:
         """
         Perform layer backward propagation logic.

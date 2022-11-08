@@ -17,4 +17,4 @@ class GradientDescent(Optimizer):
                 continue
 
             (w, b), (dw, db) = weights, gradients
-            layer.set_wights(w=w - self._lr * dw, b=b - self._lr * db)
+            layer.set_weights(w=w - self._lr * dw, b=b - self._lr * db)
