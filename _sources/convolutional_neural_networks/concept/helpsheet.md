@@ -1,3 +1,6 @@
+<link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+<script src="https://tikzjax.com/v1/tikzjax.js"></script>
+
 # Helpsheet: Convolutional Neural Networks
 
 Everything here is relevant to 2D convolutional neural networks. Definitions may need to scale up
@@ -58,7 +61,7 @@ One can read more about them [here](https://datascience.stackexchange.com/questi
 $\X$
 ```
 
-````{figure} https://storage.googleapis.com/reighns/reighns_ml_projects/docs/gaohn-machine-learning-foundations/correlation_d2l.svg
+````{figure} https://storage.googleapis.com/reighns/reighns_ml_projects/docs/gaohn-machine-learning-foundations/correlation-d2l.svg
 ---
 name: fig_cross_correlation
 ---
@@ -181,20 +184,30 @@ where $\lfloor x \rfloor$ is the floor function.
 
 So far we have only discussed convolutions over 2D images. However, we can also apply convolutions over 3D volumes (i.e. RGB images with 3 channels).
 
+For example, we can apply convolutions over a 3D volume of size $n_c \times n_h \times n_w$ where $n_c$ is the number of channels. In this case, the kernel is also a 3D volume of size $n_c \times k_h \times k_w$.
 
-For example, we can apply convolutions over a 3D volume of size $n_h \times n_w \times n_c$ where $n_c$ is the number of channels. In this case, the kernel is also a 3D volume of size $k_h \times k_w \times n_c$.
-<link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
-<script src="https://tikzjax.com/v1/tikzjax.js"></script>
+````{figure} https://storage.googleapis.com/reighns/reighns_ml_projects/docs/gaohn-machine-learning-foundations/conv-multi-in-d2l.svg
+---
+name: fig_conv_multi_in
+---
+Cross-correlation operation with multiple input channels.
 
+Image Credits: [Dive into Deep Learning](https://d2l.ai/chapter_convolutional-neural-networks/channels.html)
+````
 
-<script type="text/tikz">
-  \begin{tikzpicture}[scale=0.5]     \draw (0.5, 0.5) rectangle (3.5, 3.5);     \draw (0.25, 0.25) rectangle (3.25, 3.25); 
-    \draw (0, 0) rectangle (3, 3);
-    \node at (1.5, -.5) {$6 \times 6$};
-    \node (channels) at (6.75, .4) {$3$ channels};
-    \draw[->] (channels) to (3.5, .4);
-  \end{tikzpicture} 
-</script>
+The below Convolutional Demo from CS231N is helpful in visualizing convolving over 3D volumes.
+
+````{figure} https://storage.googleapis.com/reighns/reighns_ml_projects/docs/gaohn-machine-learning-foundations/cs231n-convolutional-demo.gif
+---
+name: fig_filters_and_kernels
+---
+The filter is applied to each region of the input image, and the result is a single value. Image Credit: [CS231N](https://cs231n.github.io/convolutional-networks/)
+````
+
+## Learnable Parameters
+
+## 1x1 Convolutions
+
 
 ## Summary
 
@@ -219,12 +232,6 @@ This **does not mean** the filter is a square of size $5 \times 5$, instead, it 
 
 
 
-````{figure} https://storage.googleapis.com/reighns/reighns_ml_projects/docs/gaohn-machine-learning-foundations/cs231n-convolutional-demo.gif
----
-name: fig_filters_and_kernels
----
-The filter is applied to each region of the input image, and the result is a single value. Image Credit: [CS231N](https://cs231n.github.io/convolutional-networks/)
-````
 
 
 
