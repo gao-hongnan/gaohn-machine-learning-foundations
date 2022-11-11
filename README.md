@@ -34,7 +34,7 @@ try to connect the dots and see the big picture.
 
 ```bash
 ~/gaohn                                                $ git clone https://github.com/gao-hongnan/gaohn-machine-learning-foundations.git
-~/gaohn/gaohn-machine-learning-foundations             $ cd gaohn-machine-learning-foundations
+~/gaohn                                                $ cd gaohn-machine-learning-foundations
 ~/gaohn/gaohn-machine-learning-foundations             $ python -m venv <venv_name> && <venv_name>\Scripts\activate 
 ~/gaohn/gaohn-machine-learning-foundations (venv_name) $ python -m pip install --upgrade pip setuptools wheel
 ~/gaohn/gaohn-machine-learning-foundations (venv_name) $ pip install -r requirements.txt
