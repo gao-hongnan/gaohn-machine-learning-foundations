@@ -7,6 +7,10 @@ parts:
   - caption: Convolutional Neural Networks
     chapters:
       - file: convolutional_neural_networks/concept/helpsheet.md
+      
+      - file: convolutional_neural_networks/application/filters_and_kernels/convolutional_kernels.ipynb
+      - file: convolutional_neural_networks/application/augmentations/Image_Normalization_and_Standardization.ipynb
+
   - caption: Optimization
     chapters:
       - file: optimization/concept/gradient_descent_concept.md

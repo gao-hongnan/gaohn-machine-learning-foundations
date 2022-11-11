@@ -5,7 +5,6 @@ Nov, 2022
 <br>
 </div>
 
-
 <h4 align="center">
   <a href="https://gao-hongnan.github.io/gaohn-machine-learning-foundations/">Documentation</a>
 </h4>
@@ -34,16 +33,22 @@ try to connect the dots and see the big picture.
 ### Installation
 
 ```bash
-~/gaohn              $ git clone [https://github.com/gao-hongnan/gaohn-probability-stats.git gaohn_probability_stats](https://github.com/gao-hongnan/gaohn-machine-learning-foundations.git)
-~/gaohn              $ cd gaohn-machine-learning-foundations
-~/gaohn              $ python -m venv <venv_name> && <venv_name>\Scripts\activate 
-~/gaohn  (venv_name) $ python -m pip install --upgrade pip setuptools wheel
-~/gaohn  (venv_name) $ pip install -r requirements.txt
-~/gaohn  (venv_name) $ pip install myst-nb==0.16.0 
+~/gaohn                                                $ git clone https://github.com/gao-hongnan/gaohn-machine-learning-foundations.git
+~/gaohn/gaohn-machine-learning-foundations             $ cd gaohn-machine-learning-foundations
+~/gaohn/gaohn-machine-learning-foundations             $ python -m venv <venv_name> && <venv_name>\Scripts\activate 
+~/gaohn/gaohn-machine-learning-foundations (venv_name) $ python -m pip install --upgrade pip setuptools wheel
+~/gaohn/gaohn-machine-learning-foundations (venv_name) $ pip install -r requirements.txt
+~/gaohn/gaohn-machine-learning-foundations (venv_name) $ pip install myst-nb==0.16.0 
 ```
 
 The reason for manual install of `myst-nb==0.16.0` is because it is not in sync with the current jupyterbook
 version, I updated this feature to be able to show line numbers in code cells.
+
+Note to install PyTorch with GPU, instead of `pip install -r requirements.txt`, you need to do:
+
+```bash
+~/gaohn/gaohn-machine-learning-foundations (venv_name) $ pip install -r requirements.txt -f https://download.pytorch.org/whl/torch_stable.html 
+```
 
 ### Building the book
 
@@ -52,13 +57,13 @@ After cloning, you can edit the books source files located in the `content/` dir
 You run
 
 ```bash
-~/gaohn  (venv_name) $ jupyter-book build content/
+~/gaohn/gaohn-machine-learning-foundations (venv_name) $ jupyter-book build content/
 ```
 
 to build the book, and
 
 ```bash
-~/gaohn  (venv_name) $ jupyter-book clean content/
+~/gaohn/gaohn-machine-learning-foundations (venv_name) $ jupyter-book clean content/
 ```
 
 to clean the build files.
