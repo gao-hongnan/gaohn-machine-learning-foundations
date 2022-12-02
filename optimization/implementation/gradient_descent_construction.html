@@ -393,6 +393,16 @@ title="Print to PDF"
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#base">
+   Base
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#gradient-descent">
+   Gradient Descent
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#d-example">
    2D Example
   </a>
@@ -417,6 +427,16 @@ title="Print to PDF"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#base">
+   Base
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#gradient-descent">
+   Gradient Descent
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#d-example">
    2D Example
   </a>
@@ -435,7 +455,7 @@ title="Print to PDF"
 <h1>Gradient Descent Construction<a class="headerlink" href="#gradient-descent-construction" title="Permalink to this headline">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># %pip install -q --progress-bar off d2l==1.0.0a1.post0 # replace ! with % for jupyter notebook</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># %pip install -q --progress-bar off d2l==1.0.0a1.post0 # replace ! with % for jupyter notebook
 </pre></div>
 </div>
 </div>
@@ -443,173 +463,193 @@ title="Print to PDF"
 <p>Ref: <a class="reference external" href="https://d2l.ai/chapter_optimization/gd.html">https://d2l.ai/chapter_optimization/gd.html</a></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span><span class="p">,</span> <span class="n">ABCMeta</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import copy
+from abc import ABC, abstractmethod
+from typing import Any, Callable, List, Optional, Tuple, TypeVar, Union
 
-<span class="c1"># import numpy as np</span>
-<span class="kn">from</span> <span class="nn">d2l</span> <span class="kn">import</span> <span class="n">torch</span> <span class="k">as</span> <span class="n">d2l</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">copy</span>
-
-<span class="kn">import</span> <span class="nn">autograd.numpy</span> <span class="k">as</span> <span class="nn">np</span>  <span class="c1"># Thinly-wrapped numpy</span>
-<span class="kn">from</span> <span class="nn">autograd</span> <span class="kn">import</span> <span class="n">grad</span>    <span class="c1"># The only autograd function you may ever need</span>
+import autograd.numpy as np  # import numpy as np
+import torch
+from autograd import grad
+from d2l import torch as d2l
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Function</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_f</span> <span class="o">=</span> <span class="n">f</span>
-
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-        <span class="c1"># a function returns a scalar float</span>
-        <span class="n">fx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">fx</span>
-
-
-<span class="k">class</span> <span class="nc">GradFunction</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grad_f</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_grad_f</span> <span class="o">=</span> <span class="n">grad_f</span>
-
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="c1"># grad fn/vector returns an array of vector</span>
-        <span class="n">grad_fx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grad_f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">grad_fx</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>T = TypeVar(&quot;T&quot;, bound=Union[float, np.ndarray, torch.Tensor])
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Optimizer</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Abstract class for optimizers.&quot;&quot;&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class Function:
+    def __init__(self, f: Callable) -&gt; None:
+        self._f = f
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">grad_f</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">num_epochs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">lr</span><span class="p">:</span> <span class="nb">float</span>
-    <span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_f</span> <span class="o">=</span> <span class="n">f</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_grad_f</span> <span class="o">=</span> <span class="n">grad_f</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_num_epochs</span> <span class="o">=</span> <span class="n">num_epochs</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_lr</span> <span class="o">=</span> <span class="n">lr</span>
-
-    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">weights</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-        <span class="n">biases</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Update the weights and biases.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            weights (np.ndarray): </span>
-<span class="sd">            biases (np.ndarray): </span>
+    def __call__(self, x: T, *args: Any, **kwargs: Any) -&gt; T:
+        # a function returns a scalar float
+        fx = self._f(*args, **kwargs)
+        return fx
 
 
-<span class="sd">        Raises:</span>
-<span class="sd">            NotImplementedError: </span>
-<span class="sd">        &quot;&quot;&quot;</span>
+class GradFunction:
+    def __init__(self, grad_f: Callable) -&gt; None:
+        self._grad_f = grad_f
 
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+    def __call__(self, x: T, *args: Any, **kwargs: Any) -&gt; T:
+        # grad fn/vector returns an array of vector
+        grad_fx = self._grad_f(*args, **kwargs)
+        return grad_fx
+</pre></div>
+</div>
+</div>
+</div>
+<section id="base">
+<h2>Base<a class="headerlink" href="#base" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># pylint: disable=invalid-name, redefined-outer-name, too-few-public-methods
+class Optimizer(ABC):
+    &quot;&quot;&quot;Abstract class for optimizers.
+    Currently, you need to define the f and grad_f functions in the constructor.
+    &quot;&quot;&quot;
 
+    def __init__(self, f: Callable, grad_f: Callable, lr: float, **kwargs: Any) -&gt; None:
+        self.f = f
+        self.grad_f = grad_f
+        self.lr = lr
+        self.kwargs = kwargs
 
-<span class="k">class</span> <span class="nc">GradientDescent</span><span class="p">(</span><span class="n">Optimizer</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">grad_f</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">num_epochs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">lr</span><span class="p">:</span> <span class="nb">float</span>
-    <span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_f</span> <span class="o">=</span> <span class="n">f</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_grad_f</span> <span class="o">=</span> <span class="n">grad_f</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_num_epochs</span> <span class="o">=</span> <span class="n">num_epochs</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_lr</span> <span class="o">=</span> <span class="n">lr</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">weights_history</span> <span class="o">=</span> <span class="p">[]</span>
-  
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">weights</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-        <span class="n">biases</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    @abstractmethod
+    def step(
+        self,
+        weights: T,
+        biases: Optional[T] = None,
+    ) -&gt; None:
+        &quot;&quot;&quot;Update the weights and biases.
 
-        <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_epochs</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        Args:
+            weights (np.ndarray): The weights to update.
+            biases (np.ndarray): The biases to update.
 
-            <span class="c1"># grad vec at each point </span>
-            <span class="n">gradient_vector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grad_f</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
-            <span class="n">weights</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lr</span> <span class="o">*</span> <span class="n">gradient_vector</span>
-        
-            <span class="k">if</span> <span class="n">biases</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">pass</span> <span class="c1"># implement next time</span>
-                <span class="c1"># biases -= self._lr * gradient_vector[1:]</span>
+        Raises:
+            NotImplementedError:
+        &quot;&quot;&quot;
+        raise NotImplementedError
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="gradient-descent">
+<h2>Gradient Descent<a class="headerlink" href="#gradient-descent" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class GradientDescent(Optimizer):
+    &quot;&quot;&quot;Gradient descent optimizer.&quot;&quot;&quot;
 
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Epoch </span><span class="si">{</span><span class="n">epoch</span><span class="si">}</span><span class="s2">: weights </span><span class="si">{</span><span class="n">weights</span><span class="si">}</span><span class="s2">, biases </span><span class="si">{</span><span class="n">biases</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    weights_history: List[T]
 
-            <span class="c1"># must use copy if not weights (np array) mutatable: https://tinyurl.com/bdff69by</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">weights_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">weights</span><span class="p">))</span> 
-      
-        <span class="k">return</span> <span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights_history</span>
+    def __init__(self, f: Callable, grad_f: Callable, lr: float, **kwargs: Any) -&gt; None:
+        super().__init__(f, grad_f, lr, **kwargs)
+        self.weights_history = []
+
+    def step(
+        self,
+        weights: T,
+        biases: Optional[T] = None,
+    ) -&gt; Tuple[T, T, List[T]]:
+        # grad vec at each point
+        gradient_vector = self.grad_f(weights)
+        weights -= self.lr * gradient_vector
+
+        if biases is not None:
+            raise NotImplementedError(&quot;Biases are not implemented yet.&quot;)
+
+        print(f&quot;weights {weights}, biases {biases}&quot;)
+
+        # must use copy if not weights (np array) mutatable:
+        # https://tinyurl.com/bdff69by
+        self.weights_history.append(copy.copy(weights))
+        return weights, biases, self.weights_history
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">w</span><span class="p">):</span>  <span class="c1"># Objective function</span>
-    <span class="k">return</span> <span class="n">w</span> <span class="o">**</span> <span class="mi">2</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def f(w: T) -&gt; T:  # Objective function
+    &quot;&quot;&quot;f(w) = w^2&quot;&quot;&quot;
+    return w**2
 
 
-<span class="k">def</span> <span class="nf">grad_f</span><span class="p">(</span>
-    <span class="n">w</span><span class="p">,</span>
-<span class="p">):</span>  <span class="c1"># Gradient (derivative) of the objective function</span>
-    <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">w</span>
+def grad_f(w: T) -&gt; T:  # Gradient (derivative) of the objective function
+    &quot;&quot;&quot;f&#39;(w) = 2w&quot;&quot;&quot;
+    return 2 * w
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">batch_gd</span> <span class="o">=</span> <span class="n">GradientDescent</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">grad_f</span> <span class="o">=</span> <span class="n">grad_f</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>batch_gd = GradientDescent(f=f, grad_f=grad_f, lr=0.2)
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">initial_weight</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">initial_bias</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># we ignore bias for simplicity</span>
-<span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">weights_history</span> <span class="o">=</span> <span class="n">batch_gd</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">initial_weight</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>initial_weight = 10
+initial_bias = None # we ignore bias for simplicity
+num_epochs = 10
+for epoch in range(num_epochs):
+    initial_weight, initial_bias, weights_history = batch_gd.step(
+        initial_weight, initial_bias
+    )
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 1: weights 6.0, biases None
-Epoch 2: weights 3.5999999999999996, biases None
-Epoch 3: weights 2.1599999999999997, biases None
-Epoch 4: weights 1.2959999999999998, biases None
-Epoch 5: weights 0.7775999999999998, biases None
-Epoch 6: weights 0.46655999999999986, biases None
-Epoch 7: weights 0.2799359999999999, biases None
-Epoch 8: weights 0.16796159999999993, biases None
-Epoch 9: weights 0.10077695999999996, biases None
-Epoch 10: weights 0.06046617599999997, biases None
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>weights 6.0, biases None
+weights 3.5999999999999996, biases None
+weights 2.1599999999999997, biases None
+weights 1.2959999999999998, biases None
+weights 0.7775999999999998, biases None
+weights 0.46655999999999986, biases None
+weights 0.2799359999999999, biases None
+weights 0.16796159999999993, biases None
+weights 0.10077695999999996, biases None
+weights 0.06046617599999997, biases None
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">show_trace</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">results</span><span class="p">)),</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">results</span><span class="p">)))</span>
-    <span class="n">f_line</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
-    <span class="n">d2l</span><span class="o">.</span><span class="n">set_figsize</span><span class="p">()</span>
-    <span class="n">d2l</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">f_line</span><span class="p">,</span> <span class="n">results</span><span class="p">],</span> <span class="p">[[</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">f_line</span><span class="p">],</span> <span class="p">[</span>
-        <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]],</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;f(x)&#39;</span><span class="p">,</span> <span class="n">fmts</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;-o&#39;</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def show_trace(f: Callable, results: List[T]) -&gt; None:
+    &quot;&quot;&quot;Show the trace of variables during optimization.&quot;&quot;&quot;
+    n = max(abs(min(results)), abs(max(results)))
+    f_line = torch.arange(-n, n, 0.01)
+    d2l.set_figsize()
+    d2l.plot(
+        [f_line, results],
+        [[f(x) for x in f_line], [f(x) for x in results]],
+        &quot;x&quot;,
+        &quot;f(x)&quot;,
+        fmts=[&quot;-&quot;, &quot;-o&quot;],
+    )
+    d2l.plt.show()
 
-<span class="n">show_trace</span><span class="p">(</span><span class="n">weights_history</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+show_trace(f, weights_history)
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/gradient_descent_construction_9_0.svg" src="../../_images/gradient_descent_construction_9_0.svg" /></div>
+<img alt="../../_images/gradient_descent_construction_13_0.svg" src="../../_images/gradient_descent_construction_13_0.svg" /></div>
 </div>
+</section>
 <section id="d-example">
 <h2>2D Example<a class="headerlink" href="#d-example" title="Permalink to this headline">#</a></h2>
 <p>Let the problem be a linear model involving 2 variables:</p>
@@ -629,13 +669,14 @@ L(\beta_1, \beta_2) = \beta_1^2 + 2\beta_2^2
 \[\begin{split}
 \nabla L(\beta_1, \beta_2) = \begin{bmatrix} 2\beta_1 \\ 4\beta_2 \end{bmatrix}
 \end{split}\]</div>
+<p>In the original text, the author defines the function as follows:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f_2d</span><span class="p">(</span><span class="n">w1</span><span class="p">,</span> <span class="n">w2</span><span class="p">):</span>  <span class="c1"># Objective function</span>
-    <span class="k">return</span> <span class="n">w1</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">w2</span> <span class="o">**</span> <span class="mi">2</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def f_2d(w1, w2):  # Objective function
+    return w1 ** 2 + 2 * w2 ** 2
 
-<span class="k">def</span> <span class="nf">grad_f_2d</span><span class="p">(</span><span class="n">w1</span><span class="p">,</span> <span class="n">w2</span><span class="p">):</span>  <span class="c1"># Gradient of the objective function</span>
-    <span class="k">return</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">w1</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">w2</span><span class="p">)</span>
+def grad_f_2d(w1, w2):  # Gradient of the objective function
+    return (2 * w1, 4 * w2)
 </pre></div>
 </div>
 </div>
@@ -643,20 +684,25 @@ L(\beta_1, \beta_2) = \beta_1^2 + 2\beta_2^2
 <p>We reframe the same functions below to take in only 1 weight vector so autograd can do its work.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f_2d</span><span class="p">(</span><span class="n">w</span><span class="p">):</span>  <span class="c1"># Objective function</span>
-    <span class="n">w1</span><span class="p">,</span> <span class="n">w2</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">w1</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">w2</span> <span class="o">**</span> <span class="mi">2</span>
-    
-<span class="k">def</span> <span class="nf">grad_f_2d</span><span class="p">(</span><span class="n">w</span><span class="p">):</span>  <span class="c1"># Gradient of the objective function</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">2</span> <span class="o">*</span> <span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def f_2d(w: T) -&gt; T:  # Objective function
+    &quot;&quot;&quot;w = [w1, w2] \\in R^2.
+    f(w) = w_1^2 + 2w_2^2&quot;&quot;&quot;
+    w1, w2 = w[0], w[1]
+    return w1**2 + 2 * w2**2
+
+
+def grad_f_2d(w: T) -&gt; T:  # Gradient (derivative) of the objective function
+    &quot;&quot;&quot;\\nabla f = f&#39;(w) = [2w_1, 4w_2] \\in R^2.&quot;&quot;&quot;
+    return np.asarray([2 * w[0], 4 * w[1]])
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">initial_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span> <span class="c1"># x1, x2, s1, s2 = -5, -2, 0, 0</span>
-<span class="n">initial_biases</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># we ignore bias for simplicity</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>initial_weights = np.asarray([-5, -2]).astype(&#39;float32&#39;) 
+initial_biases = None # we ignore bias for simplicity
+num_epochs = 20
 </pre></div>
 </div>
 </div>
@@ -664,80 +710,95 @@ L(\beta_1, \beta_2) = \beta_1^2 + 2\beta_2^2
 <p>We can use autograd to directly compute the gradient vector for us.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">autograd_f</span> <span class="o">=</span> <span class="n">grad</span><span class="p">(</span><span class="n">f_2d</span><span class="p">)</span>
-<span class="n">autograd_f</span><span class="p">(</span><span class="n">initial_weights</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>autograd_f = grad(f_2d)
+assert autograd_f(initial_weights).all() == grad_f_2d(initial_weights).all() == np.asarray([10, -8]).all()
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>batch_gd_no_autograd = GradientDescent(f=f_2d, grad_f=grad_f_2d, lr=0.1)  # no autograd
+batch_gd_with_autograd = GradientDescent(f=f_2d, grad_f=autograd_f, lr=0.1)  # autograd
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>for epoch in range(num_epochs):
+    initial_weights, initial_biases, weights_history = batch_gd_no_autograd.step(
+        initial_weights, initial_biases
+    )
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([-10.,  -8.], dtype=float32)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>weights [-4.  -1.2], biases None
+weights [-3.2  -0.72], biases None
+weights [-2.56  -0.432], biases None
+weights [-2.0479999 -0.2592   ], biases None
+weights [-1.6383998 -0.15552  ], biases None
+weights [-1.3107198 -0.093312 ], biases None
+weights [-1.0485759 -0.0559872], biases None
+weights [-0.8388607  -0.03359232], biases None
+weights [-0.6710886  -0.02015539], biases None
+weights [-0.53687084 -0.01209324], biases None
+weights [-0.42949668 -0.00725594], biases None
+weights [-0.34359735 -0.00435357], biases None
+weights [-0.27487788 -0.00261214], biases None
+weights [-0.2199023  -0.00156728], biases None
+weights [-0.17592184 -0.00094037], biases None
+weights [-0.14073747 -0.00056422], biases None
+weights [-0.11258998 -0.00033853], biases None
+weights [-0.09007198 -0.00020312], biases None
+weights [-0.07205759 -0.00012187], biases None
+weights [-5.7646073e-02 -7.3123170e-05], biases None
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># batch_gd = GradientDescent(f=f_2d, grad_f = grad_f_2d, num_epochs=20, lr=0.1)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">batch_gd</span> <span class="o">=</span> <span class="n">GradientDescent</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="n">f_2d</span><span class="p">,</span> <span class="n">grad_f</span> <span class="o">=</span> <span class="n">autograd_f</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span> <span class="c1"># autograd</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">weights_history</span> <span class="o">=</span> <span class="n">batch_gd</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">initial_weights</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>initial_weights = np.asarray([-5, -2]).astype(&#39;float32&#39;) 
+initial_biases = None # we ignore bias for simplicity
+num_epochs = 20
+
+for epoch in range(num_epochs):
+    initial_weights, initial_biases, weights_history = batch_gd_with_autograd.step(
+        initial_weights, initial_biases
+    )
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 1: weights [-4.  -1.2], biases None
-Epoch 2: weights [-3.2  -0.72], biases None
-Epoch 3: weights [-2.56  -0.432], biases None
-Epoch 4: weights [-2.0479999 -0.2592   ], biases None
-Epoch 5: weights [-1.6383998  -0.15551999], biases None
-Epoch 6: weights [-1.3107198 -0.093312 ], biases None
-Epoch 7: weights [-1.0485759 -0.0559872], biases None
-Epoch 8: weights [-0.8388607  -0.03359232], biases None
-Epoch 9: weights [-0.6710886  -0.02015539], biases None
-Epoch 10: weights [-0.53687084 -0.01209324], biases None
-Epoch 11: weights [-0.42949668 -0.00725594], biases None
-Epoch 12: weights [-0.34359735 -0.00435356], biases None
-Epoch 13: weights [-0.27487788 -0.00261214], biases None
-Epoch 14: weights [-0.2199023  -0.00156728], biases None
-Epoch 15: weights [-0.17592184 -0.00094037], biases None
-Epoch 16: weights [-0.14073747 -0.00056422], biases None
-Epoch 17: weights [-0.11258998 -0.00033853], biases None
-Epoch 18: weights [-0.09007198 -0.00020312], biases None
-Epoch 19: weights [-0.07205759 -0.00012187], biases None
-Epoch 20: weights [-5.7646073e-02 -7.3123156e-05], biases None
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>weights [-4.  -1.2], biases None
+weights [-3.2  -0.72], biases None
+weights [-2.56  -0.432], biases None
+weights [-2.0479999 -0.2592   ], biases None
+weights [-1.6383998  -0.15551999], biases None
+weights [-1.3107198 -0.093312 ], biases None
+weights [-1.0485759 -0.0559872], biases None
+weights [-0.8388607  -0.03359232], biases None
+weights [-0.6710886  -0.02015539], biases None
+weights [-0.53687084 -0.01209324], biases None
+weights [-0.42949668 -0.00725594], biases None
+weights [-0.34359735 -0.00435356], biases None
+weights [-0.27487788 -0.00261214], biases None
+weights [-0.2199023  -0.00156728], biases None
+weights [-0.17592184 -0.00094037], biases None
+weights [-0.14073747 -0.00056422], biases None
+weights [-0.11258998 -0.00033853], biases None
+weights [-0.09007198 -0.00020312], biases None
+weights [-0.07205759 -0.00012187], biases None
+weights [-5.7646073e-02 -7.3123156e-05], biases None
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">show_trace_2d</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">results</span><span class="p">):</span> 
-    <span class="sd">&quot;&quot;&quot;Show the trace of 2D variables during optimization.&quot;&quot;&quot;</span>
-    <span class="n">d2l</span><span class="o">.</span><span class="n">set_figsize</span><span class="p">()</span>
-    <span class="n">d2l</span><span class="o">.</span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">results</span><span class="p">),</span> <span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#ff7f0e&#39;</span><span class="p">)</span>
-    <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mf">5.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span>
-                          <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">))</span>
-    <span class="n">d2l</span><span class="o">.</span><span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">f</span><span class="p">([</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">]),</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;#1f77b4&#39;</span><span class="p">)</span>
-    <span class="n">d2l</span><span class="o">.</span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x1&#39;</span><span class="p">)</span>
-    <span class="n">d2l</span><span class="o">.</span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;x2&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">weights_history</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>weights_history
 </pre></div>
 </div>
 </div>
@@ -768,16 +829,29 @@ Epoch 20: weights [-5.7646073e-02 -7.3123156e-05], biases None
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">show_trace_2d</span><span class="p">(</span><span class="n">f_2d</span><span class="p">,</span> <span class="n">weights_history</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def show_trace_2d(f: Callable, results: List[T]) -&gt; None:
+    &quot;&quot;&quot;Show the trace of 2D variables during optimization.&quot;&quot;&quot;
+    d2l.set_figsize()
+    d2l.plt.plot(*zip(*results), &quot;-o&quot;, color=&quot;#ff7f0e&quot;)
+    x1, x2 = torch.meshgrid(
+        torch.arange(-5.5, 1.0, 0.1), torch.arange(-3.0, 1.0, 0.1), indexing=&quot;ij&quot;
+    )
+    d2l.plt.contour(x1, x2, f([x1, x2]), colors=&quot;#1f77b4&quot;)
+    d2l.plt.xlabel(&quot;x1&quot;)
+    d2l.plt.ylabel(&quot;x2&quot;)
+    d2l.plt.show()
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>show_trace_2d(f_2d, weights_history)
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.8.14/x64/lib/python3.8/site-packages/torch/functional.py:478: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at  ../aten/src/ATen/native/TensorShape.cpp:2894.)
-  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
-</pre></div>
-</div>
-<img alt="../../_images/gradient_descent_construction_23_1.svg" src="../../_images/gradient_descent_construction_23_1.svg" /></div>
+<img alt="../../_images/gradient_descent_construction_28_0.svg" src="../../_images/gradient_descent_construction_28_0.svg" /></div>
 </div>
 </section>
 </section>
