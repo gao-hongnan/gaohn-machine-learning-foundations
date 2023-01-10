@@ -11,11 +11,6 @@ parts:
       - file: convolutional_neural_networks/application/filters_and_kernels/convolutional_kernels.ipynb
       - file: convolutional_neural_networks/application/augmentations/Image_Normalization_and_Standardization.ipynb
 
-  - caption: Optimization
-    chapters:
-      - file: optimization/concept/gradient_descent_concept.md
-      - file: optimization/implementation/gradient_descent_construction.ipynb
-
   - caption: References
     chapters:
       - file: bibliography/bibliography.md
