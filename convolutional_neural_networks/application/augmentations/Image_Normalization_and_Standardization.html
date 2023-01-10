@@ -57,7 +57,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Gradient Descent Concept" href="../../../optimization/concept/gradient_descent_concept.html" />
+    <link rel="next" title="Bibliography" href="../../../bibliography/bibliography.html" />
     <link rel="prev" title="EDA Visualizations for Computer Vision (Convolutional Filter Edition)" href="../filters_and_kernels/convolutional_kernels.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -137,23 +137,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Image Normalization and Standardization
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Optimization
- </span>
-</p>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../../../optimization/concept/gradient_descent_concept.html">
-   Gradient Descent Concept
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../../../optimization/implementation/gradient_descent_construction.html">
-   Gradient Descent Construction
   </a>
  </li>
 </ul>
@@ -475,44 +458,44 @@ title="Print to PDF"
 <h1>Image Normalization and Standardization<a class="headerlink" href="#image-normalization-and-standardization" title="Permalink to this headline">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import os
-import random
-from typing import Dict, Tuple
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
 
-import cv2
-import numpy as np
-import pandas as pd
-import torch
-import torchvision.datasets as datasets
-from PIL import Image, ImageFile
-from torchvision import transforms
-from tqdm import tqdm
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torchvision.datasets</span> <span class="k">as</span> <span class="nn">datasets</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageFile</span>
+<span class="kn">from</span> <span class="nn">torchvision</span> <span class="kn">import</span> <span class="n">transforms</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def seed_all(seed: int = 1930):
-    &quot;&quot;&quot;Seed all random number generators.&quot;&quot;&quot;
-    print(&quot;Using Seed Number {}&quot;.format(seed))
-    # set PYTHONHASHSEED env var at fixed value
-    os.environ[&quot;PYTHONHASHSEED&quot;] = str(seed)    
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed)
-    torch.cuda.manual_seed(seed)  # pytorch (both CPU and CUDA)
-    np.random.seed(seed)  # for numpy pseudo-random generator
-    random.seed(seed)  # set fixed value for python built-in pseudo-random generator
-    torch.backends.cudnn.deterministic = True
-    torch.backends.cudnn.benchmark = False
-    torch.backends.cudnn.enabled = False
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">seed_all</span><span class="p">(</span><span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1930</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Seed all random number generators.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Using Seed Number </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">seed</span><span class="p">))</span>
+    <span class="c1"># set PYTHONHASHSEED env var at fixed value</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYTHONHASHSEED&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>    
+    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">manual_seed_all</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>  <span class="c1"># pytorch (both CPU and CUDA)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>  <span class="c1"># for numpy pseudo-random generator</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>  <span class="c1"># set fixed value for python built-in pseudo-random generator</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">deterministic</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">False</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>seed_all()
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">seed_all</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -567,21 +550,21 @@ In our examples below, I apply mean and std calculation on the training set (whi
 <p>We will code a function to calculate the mean and standard deviation of a batch of images.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>TRANSFORMS = transforms.Compose([transforms.ToTensor()])
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">TRANSFORMS</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span><span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">()])</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>trainset_cifar10 = datasets.CIFAR10(
-    root=&quot;./data&quot;, train=True, download=True, transform=TRANSFORMS
-)
-testset_cifar10 = datasets.CIFAR10(
-    root=&quot;./data&quot;, train=False, download=True, transform=TRANSFORMS
-)
-train_images_cifar10 = np.asarray(trainset_cifar10.data)  # (50000, 32, 32, 3)
-test_images_cifar10 = np.asarray(testset_cifar10.data)  # (10000, 32, 32, 3)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trainset_cifar10</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">CIFAR10</span><span class="p">(</span>
+    <span class="n">root</span><span class="o">=</span><span class="s2">&quot;./data&quot;</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">TRANSFORMS</span>
+<span class="p">)</span>
+<span class="n">testset_cifar10</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">CIFAR10</span><span class="p">(</span>
+    <span class="n">root</span><span class="o">=</span><span class="s2">&quot;./data&quot;</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">TRANSFORMS</span>
+<span class="p">)</span>
+<span class="n">train_images_cifar10</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">trainset_cifar10</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>  <span class="c1"># (50000, 32, 32, 3)</span>
+<span class="n">test_images_cifar10</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">testset_cifar10</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>  <span class="c1"># (10000, 32, 32, 3)</span>
 </pre></div>
 </div>
 </div>
@@ -594,61 +577,61 @@ Files already downloaded and verified
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def calcMeanStd(images: np.ndarray) -&gt; Dict[str, Tuple[float]]:
-    &quot;&quot;&quot;Take in an numpy array of images and returns mean and std per channel.
-    This function assumes for a start, your array is loaded into disk.
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">calcMeanStd</span><span class="p">(</span><span class="n">images</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Take in an numpy array of images and returns mean and std per channel.</span>
+<span class="sd">    This function assumes for a start, your array is loaded into disk.</span>
 
-    Args:
-        images (np.ndarray): [num_images, channel, height, width] or [num_images, height, width, channel]
+<span class="sd">    Args:</span>
+<span class="sd">        images (np.ndarray): [num_images, channel, height, width] or [num_images, height, width, channel]</span>
 
-    Returns:
-        Dict[str, Tuple[float]]: {&quot;mean&quot;: (mean_r, mean_g, mean_b), &quot;std&quot;: (std_r, std_g, std_b)}
-    &quot;&quot;&quot;
+<span class="sd">    Returns:</span>
+<span class="sd">        Dict[str, Tuple[float]]: {&quot;mean&quot;: (mean_r, mean_g, mean_b), &quot;std&quot;: (std_r, std_g, std_b)}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     
-    images = np.asarray(images) # good way to test if images is passed in the correct dtype
-    images = images / 255.      # min-max and divide by 255
+    <span class="n">images</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">images</span><span class="p">)</span> <span class="c1"># good way to test if images is passed in the correct dtype</span>
+    <span class="n">images</span> <span class="o">=</span> <span class="n">images</span> <span class="o">/</span> <span class="mf">255.</span>      <span class="c1"># min-max and divide by 255</span>
 
-    if images.ndim == 4:                            # RGB
-        if images.shape[1] != 3:                    # if channel is not first, make it so, assume channels last
-            images = images.transpose(0, 3, 1, 2)   # if tensor use permute instead
-                                                    # permutation applies the following mapping
-                                                    # axis0 -&gt; axis0
-                                                    # axis1 -&gt; axis3
-                                                    # axis2 -&gt; axis1
-                                                    # axis3 -&gt; axis2
+    <span class="k">if</span> <span class="n">images</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>                            <span class="c1"># RGB</span>
+        <span class="k">if</span> <span class="n">images</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>                    <span class="c1"># if channel is not first, make it so, assume channels last</span>
+            <span class="n">images</span> <span class="o">=</span> <span class="n">images</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>   <span class="c1"># if tensor use permute instead</span>
+                                                    <span class="c1"># permutation applies the following mapping</span>
+                                                    <span class="c1"># axis0 -&gt; axis0</span>
+                                                    <span class="c1"># axis1 -&gt; axis3</span>
+                                                    <span class="c1"># axis2 -&gt; axis1</span>
+                                                    <span class="c1"># axis3 -&gt; axis2</span>
         
-        b, c, w, h = images.shape
+        <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">images</span><span class="o">.</span><span class="n">shape</span>
 
-        r_channel, g_channel, b_channel = images[:, 0, :, :], images[:, 1, :, :], images[:, 2, :, :]      # get rgb channels individually
-        r_channel, g_channel, b_channel = r_channel.flatten(), g_channel.flatten(), b_channel.flatten()   # flatten each channel into one array
-        mean_r = r_channel.mean(axis=None) # since we are averaging per channel, we get the first channel&#39;s mean by r_channel.mean
-        mean_g = g_channel.mean(axis=None) # same as above
-        mean_b = b_channel.mean(axis=None) # same as above
+        <span class="n">r_channel</span><span class="p">,</span> <span class="n">g_channel</span><span class="p">,</span> <span class="n">b_channel</span> <span class="o">=</span> <span class="n">images</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">images</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">images</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>      <span class="c1"># get rgb channels individually</span>
+        <span class="n">r_channel</span><span class="p">,</span> <span class="n">g_channel</span><span class="p">,</span> <span class="n">b_channel</span> <span class="o">=</span> <span class="n">r_channel</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">g_channel</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">b_channel</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>   <span class="c1"># flatten each channel into one array</span>
+        <span class="n">mean_r</span> <span class="o">=</span> <span class="n">r_channel</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="c1"># since we are averaging per channel, we get the first channel&#39;s mean by r_channel.mean</span>
+        <span class="n">mean_g</span> <span class="o">=</span> <span class="n">g_channel</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="c1"># same as above</span>
+        <span class="n">mean_b</span> <span class="o">=</span> <span class="n">b_channel</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="c1"># same as above</span>
         
-        # calculate std over each channel (r,g,b)
-        std_r = r_channel.std(axis=None)
-        std_g = g_channel.std(axis=None)
-        std_b = b_channel.std(axis=None)
+        <span class="c1"># calculate std over each channel (r,g,b)</span>
+        <span class="n">std_r</span> <span class="o">=</span> <span class="n">r_channel</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">std_g</span> <span class="o">=</span> <span class="n">g_channel</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">std_b</span> <span class="o">=</span> <span class="n">b_channel</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
-        return {&#39;mean&#39;: (mean_r, mean_g, mean_b), &#39;std&#39;: (std_r, std_g, std_b)}
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">mean_r</span><span class="p">,</span> <span class="n">mean_g</span><span class="p">,</span> <span class="n">mean_b</span><span class="p">),</span> <span class="s1">&#39;std&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">std_r</span><span class="p">,</span> <span class="n">std_g</span><span class="p">,</span> <span class="n">std_b</span><span class="p">)}</span>
     
-    elif images.ndim == 3:              # grayscale
-        gray_channel = images.flatten() # flatten directly since only 1 channel
-        mean = gray_channel.mean(axis=None)
-        std = gray_channel.std(axis=None)
+    <span class="k">elif</span> <span class="n">images</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>              <span class="c1"># grayscale</span>
+        <span class="n">gray_channel</span> <span class="o">=</span> <span class="n">images</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="c1"># flatten directly since only 1 channel</span>
+        <span class="n">mean</span> <span class="o">=</span> <span class="n">gray_channel</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">std</span> <span class="o">=</span> <span class="n">gray_channel</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
         
-        return {&quot;mean&quot;: (mean,), &quot;std&quot;: (std, )}
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">mean</span><span class="p">,),</span> <span class="s2">&quot;std&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">std</span><span class="p">,</span> <span class="p">)}</span>
 
-    else:
-        raise ValueError(&quot;passed error is not of the right shape!&quot;)
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;passed error is not of the right shape!&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mean_std_cifar = calcMeanStd(train_images_cifar10)
-print(mean_std_cifar)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mean_std_cifar</span> <span class="o">=</span> <span class="n">calcMeanStd</span><span class="p">(</span><span class="n">train_images_cifar10</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mean_std_cifar</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -660,10 +643,10 @@ print(mean_std_cifar)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># alternate way to do this.
-print(trainset_cifar10.data.shape)
-print(trainset_cifar10.data.mean(axis=(0,1,2))/255)
-print(trainset_cifar10.data.std(axis=(0,1,2))/255)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># alternate way to do this.</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">trainset_cifar10</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">trainset_cifar10</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span><span class="o">/</span><span class="mi">255</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">trainset_cifar10</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span><span class="o">/</span><span class="mi">255</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -685,28 +668,28 @@ print(trainset_cifar10.data.std(axis=(0,1,2))/255)
 <p>Note step 2 can be skipped <strong>if the normalization method in the library does a division of 255 internally.</strong></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>TRANSFORMS_with_normalization = transforms.Compose(
-    [
-        transforms.Normalize(
-            mean=mean_std_cifar[&quot;mean&quot;], std=mean_std_cifar[&quot;std&quot;]
-        ),
-        transforms.ToTensor(),
-    ]
-)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">TRANSFORMS_with_normalization</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span>
+            <span class="n">mean</span><span class="o">=</span><span class="n">mean_std_cifar</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">],</span> <span class="n">std</span><span class="o">=</span><span class="n">mean_std_cifar</span><span class="p">[</span><span class="s2">&quot;std&quot;</span><span class="p">]</span>
+        <span class="p">),</span>
+        <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>trainset_cifar10 = datasets.CIFAR10(
-    root=&quot;./data&quot;, train=True, download=True, transform=TRANSFORMS_with_normalization
-)
-testset_cifar10 = datasets.CIFAR10(
-    root=&quot;./data&quot;, train=False, download=True, transform=TRANSFORMS_with_normalization
-)
-train_images_cifar10 = np.asarray(trainset_cifar10.data)  # (50000, 32, 32, 3)
-test_images_cifar10 = np.asarray(testset_cifar10.data)  # (10000, 32, 32, 3)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trainset_cifar10</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">CIFAR10</span><span class="p">(</span>
+    <span class="n">root</span><span class="o">=</span><span class="s2">&quot;./data&quot;</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">TRANSFORMS_with_normalization</span>
+<span class="p">)</span>
+<span class="n">testset_cifar10</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">CIFAR10</span><span class="p">(</span>
+    <span class="n">root</span><span class="o">=</span><span class="s2">&quot;./data&quot;</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">TRANSFORMS_with_normalization</span>
+<span class="p">)</span>
+<span class="n">train_images_cifar10</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">trainset_cifar10</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>  <span class="c1"># (50000, 32, 32, 3)</span>
+<span class="n">test_images_cifar10</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">testset_cifar10</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>  <span class="c1"># (10000, 32, 32, 3)</span>
 </pre></div>
 </div>
 </div>
@@ -728,23 +711,23 @@ Files already downloaded and verified
 <p>We will code a function to calculate the mean and standard deviation of a batch of images.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># mnist
-trainset_mnist = datasets.MNIST(
-    root=&quot;./data/&quot;, train=True, download=True, transform=TRANSFORMS
-)
-testset_mnist = datasets.MNIST(
-    root=&quot;./data&quot;, train=False, download=True, transform=TRANSFORMS
-)
-train_images_mnist = np.asarray(trainset_mnist.data)  # (60000, 28, 28)
-test_images_mnist = np.asarray(testset_mnist.data)  # (10000, 28, 28)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># mnist</span>
+<span class="n">trainset_mnist</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span>
+    <span class="n">root</span><span class="o">=</span><span class="s2">&quot;./data/&quot;</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">TRANSFORMS</span>
+<span class="p">)</span>
+<span class="n">testset_mnist</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span>
+    <span class="n">root</span><span class="o">=</span><span class="s2">&quot;./data&quot;</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">TRANSFORMS</span>
+<span class="p">)</span>
+<span class="n">train_images_mnist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">trainset_mnist</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>  <span class="c1"># (60000, 28, 28)</span>
+<span class="n">test_images_mnist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">testset_mnist</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>  <span class="c1"># (10000, 28, 28)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mean_std_mnist = calcMeanStd(train_images_mnist)
-print(mean_std_mnist)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mean_std_mnist</span> <span class="o">=</span> <span class="n">calcMeanStd</span><span class="p">(</span><span class="n">train_images_mnist</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mean_std_mnist</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -756,8 +739,8 @@ print(mean_std_mnist)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(trainset_mnist.data.float().mean() / 255)
-print(trainset_mnist.data.float().std() / 255)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">trainset_mnist</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">/</span> <span class="mi">255</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">trainset_mnist</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">/</span> <span class="mi">255</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -826,10 +809,10 @@ tensor(0.3081)
             <p class="prev-next-title">EDA Visualizations for Computer Vision (Convolutional Filter Edition)</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../../../optimization/concept/gradient_descent_concept.html" title="next page">
+    <a class='right-next' id="next-link" href="../../../bibliography/bibliography.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Gradient Descent Concept</p>
+        <p class="prev-next-title">Bibliography</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
